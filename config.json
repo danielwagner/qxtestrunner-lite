@@ -1,0 +1,74 @@
+{
+  "name"    : "testrunner",
+
+  "include" :
+  [
+    {
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+    }
+  ],
+/*
+  "export" :
+  [
+    "api",
+    "api-data",
+    "build",
+    "clean",
+    "distclean",
+    "fix",
+    "info",
+    "lint",
+    "migration",
+    "pretty",
+    "profiling",
+    "source",
+    "source-all",
+    "test",
+    "test-source",
+    "translation"
+  ],
+*/
+  "let" :
+  {
+    "APPLICATION"  : "testrunner",
+    "QOOXDOO_PATH" : "../qooxdoo.trunk",
+    "API_EXCLUDE"  : ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*"],
+    "LOCALES"      : [ "en" ],
+    "CACHE"        : "${TMPDIR}/cache",
+    "ROOT"         : ".",
+    "TEST_INCLUDE" : "${APPLICATION}.test.*"
+  },
+
+  // You only need to edit the remainder of this file, if you want to customize
+  // specific jobs, or add own job definitions.
+
+  "jobs" :
+  {
+    "common" :
+    {
+      "include" :
+      [
+        "${APPLICATION}.Application",
+        "${TEST_INCLUDE}"
+      ],
+      
+      "exclude" :
+      [
+        "qx.theme.*"
+      ],
+      
+      "=settings" :
+      {
+        "qx.version"     : "1.3-pre",
+        "qx.application" : "${APPLICATION}.Application",
+        "qx.testNameSpace" : "${APPLICATION}.test"
+      }
+    },
+    
+    "build" :
+    {
+      "run" : ["testrunnerlite::build-hybrid"]
+    }
+    
+  }
+}

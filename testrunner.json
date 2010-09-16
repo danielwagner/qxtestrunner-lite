@@ -1,0 +1,116 @@
+{
+  "name" : "Testrunner (export) config",
+
+  "let" :
+  {
+    "QOOXDOO_PATH" : "../..",
+    "TESTRUNNER_ROOT" : ".",
+    "TESTRUNNER"   : "testrunner",
+    "TEST_INCLUDE" : "${APPLICATION}.test.*",
+    "TESTS_SCRIPT" : "tests.js",         // output script name
+    "BUILD_PATH"   : "build",
+    "THEME"        : "qx.theme.Modern"
+  },
+
+  "jobs" :
+  {
+  
+    "testrunner-hybrid-common" :
+    {
+      "extend" : ["libraries"],
+    
+      "library" :
+      [
+        {
+          "manifest" : "${TESTRUNNER_ROOT}/Manifest.json"
+        }
+      ],
+
+      "include" :
+      [
+        "testrunner.Application",
+        "${TEST_INCLUDE}"
+      ],
+      
+      "exclude" :
+      [
+        "qx.theme.*"
+      ],
+
+      "settings" :
+      {
+        "qx.application"   : "testrunner.Application",
+        "qx.globalErrorHandling" : "on",
+        "qx.version"       : "${QOOXDOO_VERSION}",
+        "qx.testNameSpace" : "${APPLICATION}.test",  // this is common, but not mandatory
+        "testrunner.title" : "${APPLICATION}"
+      },
+
+      "cache" :
+      {
+        "compile" : "${CACHE}"
+      }
+    },
+  
+    "build-hybrid" : 
+    {
+      "run" :
+      [
+        "build-hybrid-resources",
+        "build-hybrid-files",
+        "build-hybrid-script"
+      ]
+    },
+    
+    "build-hybrid-files" :
+    {
+      "extend" : ["testrunner-hybrid-common"],
+
+      "copy-files" :
+      {
+        "files" :
+        [
+          "index.html"
+        ],
+
+        "target" : "${BUILD_PATH}",
+        "source" : "${TESTRUNNER_ROOT}/source"
+      }
+    },
+
+    "build-hybrid-resources":
+    {
+      "extend" : ["testrunner-hybrid-common"],
+
+      "include" :
+      [
+        "testrunner.*"
+      ],
+
+      "copy-resources" :
+      {
+        "target" : "${BUILD_PATH}"
+      }
+    },
+    
+    "build-hybrid-script" :
+    {
+      "extend" : ["testrunner-hybrid-common"],
+
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file"   : "${BUILD_PATH}/script/${TESTRUNNER}.js" // this should be relative to 'target'
+        },
+        "code" :
+        {
+          "optimize" : ["variables", "basecalls", "privates", "strings"]
+        }
+      },
+      
+      "compile" : { "type" : "build" }
+    }
+
+  }
+}

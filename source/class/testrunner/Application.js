@@ -134,9 +134,9 @@ qx.Class.define("testrunner.Application",
     __initTestResult : function()
     {
       if (this.frameWindow) {
-        var testResult = new this.frameWindow.qx.dev.unit.TestResult();
+        var testResult = new this.frameWindow.testrunner.unit.TestResult();
       } else {
-        var testResult = new qx.dev.unit.TestResult();
+        var testResult = new testrunner.unit.TestResult();
       }
       
       testResult.addListener("startTest", function(e) {

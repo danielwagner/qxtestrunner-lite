@@ -22,7 +22,8 @@
  */
 qx.Class.define("testrunner.test.DemoTest",
 {
-  extend : qx.dev.unit.TestCase,
+  //extend : qx.dev.unit.TestCase,
+  extend : testrunner.unit.TestCase,
 
   members :
   {
@@ -55,6 +56,7 @@ qx.Class.define("testrunner.test.DemoTest",
     testFail: function () 
     {
       this.assertTrue(false, "Well, what did you expect?");
+      this.debug("Executed code after failed assertion!");
     },
     
     testAsync : function()

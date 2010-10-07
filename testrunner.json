@@ -96,12 +96,17 @@
     "build-hybrid-script" :
     {
       "extend" : ["testrunner-hybrid-common"],
+      
+      "variants" :
+      {
+        "testrunner.view" : ["console", "html"]
+      },
 
       "compile-options" :
       {
         "paths" :
         {
-          "file"   : "${BUILD_PATH}/script/${TESTRUNNER}.js" // this should be relative to 'target'
+          "file"   : "${BUILD_PATH}/script/${TESTRUNNER}-{testrunner.view}.js"
         },
         "code" :
         {

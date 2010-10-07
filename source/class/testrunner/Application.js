@@ -78,8 +78,12 @@ qx.Class.define("testrunner.Application",
       }
 
       // Create view
-      this.view = new testrunner.view.Html();
-      //this.view = new testrunner.view.Console();
+      if (qx.core.Variant.isSet("testrunner.view", "console")) {
+        this.view = new testrunner.view.Console();
+      } else {
+        this.view = new testrunner.view.Html();
+      }
+            
       this.view.addListener("runTests", this.runTests, this);
       this.bind("testSuiteState", this.view, "testSuiteState");
       this.bind("testCount", this.view, "testCount");

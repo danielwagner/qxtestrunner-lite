@@ -37,6 +37,7 @@
     "CACHE"        : "${TMPDIR}/cache",
     "ROOT"         : ".",
     "TEST_INCLUDE" : "${APPLICATION}.test.*"
+    //"TEST_INCLUDE" : "qx.test.bom.*"
   },
 
   // You only need to edit the remainder of this file, if you want to customize
@@ -62,12 +63,29 @@
         "qx.version"     : "1.3-pre",
         "qx.application" : "${APPLICATION}.Application",
         "qx.testNameSpace" : "${APPLICATION}.test"
+        //"qx.testNameSpace" : "qx.test.bom"
       }
     },
     
-    "build" :
+    "=build" :
     {
       "run" : ["testrunnerlite::build-hybrid"]
+    },
+    
+    "source-script" :
+    {
+      "variants" :
+      {
+        "testrunner.view" : ["console", "html"]
+      },
+      
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${ROOT}/source/script/${APPLICATION}-{testrunner.view}.js"
+        }
+      }
     }
     
   }

@@ -37,7 +37,41 @@ qx.Class.define("testrunner.view.Console", {
       
       var msg = value[0];
       var lvl = value[1] || "info";
-      //this[lvl](msg);
+      
+      console.log(msg);
+    },
+    
+    _applyTestSuiteState : function(value, old)
+    {
+      switch(value) 
+      {
+        case "loading" :
+          this.setStatus(["Loading tests..."]);
+          break;
+        case "ready" :
+          this.setStatus(["Test suite ready"]);
+          break;
+        case "running" :
+          this.setStatus(["Running tests..."]);
+          break;
+        case "finished" :
+          this.setStatus(["Test suite finished"]);
+          break;
+        case "aborted" :
+          this.setStatus(["Test run aborted"]);
+          break;
+      };
+    },
+    
+    _applyTestCount : function(value, old)
+    {
+      var suiteState = this.getTestSuiteState();
+      switch(suiteState)
+      {
+        case "ready" :
+          this.setStatus([value + " tests ready to run"]);
+          break;
+      };
     },
     
     _onTestChangeState : function(testResultData)

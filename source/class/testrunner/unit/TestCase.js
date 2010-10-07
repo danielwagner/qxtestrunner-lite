@@ -5,7 +5,6 @@ qx.Class.define("testrunner.unit.TestCase", {
   construct : function()
   {
     this.base(arguments);
-    this._currentExceptions = [];
     
     for (var prop in this) {
       if (prop.indexOf("assert") == 0 && typeof this[prop] == "function") {
@@ -31,11 +30,5 @@ qx.Class.define("testrunner.unit.TestCase", {
         this[prop].originalName = originalName;
       }
     }    
-  },
-  
-  members :
-  {
-    _currentExceptions : null
   }
-  
 });

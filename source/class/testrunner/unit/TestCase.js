@@ -30,5 +30,27 @@ qx.Class.define("testrunner.unit.TestCase", {
         this[prop].originalName = originalName;
       }
     }    
+  },
+  
+  members :
+  {
+    require : function(featureList, testFunction, context)
+    {
+      for (var i=0,l=featureList.length; i<l; i++) {
+        var feature = featureList[i];
+        var hasMethodName = "has" + qx.lang.String.capitalize(feature); 
+        if (this[hasMethodName]
+            && this[hasMethodName]()) {
+          testFunction.call(context);
+        } else {
+          throw new testrunner.unit.RequirementError(feature);
+        }
+      }
+    },
+    
+    hasSsl : function()
+    {
+      return qx.bom.client.Feature.SSL;
+    }
   }
 });

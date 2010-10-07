@@ -189,6 +189,13 @@ qx.Class.define("testrunner.Application",
         this.currentTestData.setState("error");
       }, this);
       
+      testResult.addListener("skip", function(e) {
+        var test = e.getData();
+        var ex = e.getData().exception;
+        this.currentTestData.setException(ex);
+        this.currentTestData.setState("skip");
+      }, this);
+      
       testResult.addListener("endTest", function(e) {
         var test = e.getData();
         var state = this.currentTestData.getState();

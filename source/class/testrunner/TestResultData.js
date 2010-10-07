@@ -53,7 +53,7 @@ qx.Class.define("testrunner.TestResultData",
 
     state :
     {
-      check : [ "start", "wait", "error", "failure", "success" ],
+      check : [ "start", "wait", "skip", "error", "failure", "success" ],
       init  : "start",
       event : "changeState"
     },

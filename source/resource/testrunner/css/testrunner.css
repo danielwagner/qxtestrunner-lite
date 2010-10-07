@@ -42,6 +42,12 @@ h1 {
   border-left: 2px solid #FFFFD8;
 }
 
+#qxtestrunner_results .skip {
+  background-color: #F4F4F4;
+  border-left: 2px solid #E5E5E5;
+  color: #6EA4BC;
+}
+
 #qxtestrunner_results .failure {
   background-color: #FEF4F4;
   border-left: 2px solid #9D1111;

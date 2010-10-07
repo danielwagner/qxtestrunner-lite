@@ -2,6 +2,16 @@ qx.Class.define("testrunner.unit.TestResult", {
 
   extend : qx.dev.unit.TestResult,
   
+  events :
+  {
+    /**
+     * Fired if the test was skipped, e.g. because a requirement was not met.
+     *
+     * Event data: The test {@link qx.dev.unit.TestFunction}
+     */
+    skip : "qx.event.type.Data"
+  },
+  
   members :
   {
     run : function(test, testFunction, self, resume)
@@ -86,6 +96,8 @@ qx.Class.define("testrunner.unit.TestResult", {
             test.tearDown();
           } catch(except) {}
           this.__createError("failure", ex, test);
+        } else if (ex.classname == "testrunner.unit.RequirementError") {
+          this.__createError("skip", ex, test);
         } else {
           try {
             test.tearDown();

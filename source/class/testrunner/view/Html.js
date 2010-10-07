@@ -87,6 +87,20 @@ qx.Class.define("testrunner.view.Html", {
       };
     },
     
+    _applyTestCount : function(value, old)
+    {
+      var suiteState = this.getTestSuiteState();
+      switch(suiteState)
+      {
+        case "ready" :
+          this.setStatus([value + " tests ready to run"]);
+          break;
+        case "running" :
+          this.setStatus([value + " tests pending"]);
+          break;
+      };
+    },
+    
     clearResults : function()
     {
       this.__elemResultsList.innerHTML = "";

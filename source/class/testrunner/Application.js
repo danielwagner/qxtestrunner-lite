@@ -36,7 +36,14 @@ qx.Class.define("testrunner.Application",
     {
       init : "init",
       check : [ "init", "loading", "ready", "running", "finished", "aborted", "error" ],
-      event : "changeState"
+      event : "changeTestSuiteState"
+    },
+    
+    testCount :
+    {
+      init : 0,
+      check : "Integer",
+      event : "changeTestCount"
     }
   },
 
@@ -75,6 +82,7 @@ qx.Class.define("testrunner.Application",
       //this.view = new testrunner.view.Console();
       this.view.addListener("runTests", this.runTests, this);
       this.bind("testSuiteState", this.view, "testSuiteState");
+      this.bind("testCount", this.view, "testCount");
       
       this._loadInlineTests();
     },
@@ -120,7 +128,7 @@ qx.Class.define("testrunner.Application",
       
       this.testList.sort();
       this.setTestSuiteState("ready");
-      this.view.setStatus([testCount + " tests ready to run."]);
+      this.setTestCount(testCount);
     },
     
     runTests : function()
@@ -136,7 +144,7 @@ qx.Class.define("testrunner.Application",
       };
       
       var currentTestFull = this.testList.shift();
-      this.view.setStatus([this.testList.length + " tests pending"]);
+      this.setTestCount(this.testList.length);
       var className = currentTestFull.substr(0, currentTestFull.indexOf(":"));
       var functionName = currentTestFull.substr(currentTestFull.indexOf(":") + 1); 
       var testResult = this.__initTestResult();

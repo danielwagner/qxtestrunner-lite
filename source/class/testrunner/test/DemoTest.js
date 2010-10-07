@@ -75,10 +75,9 @@ qx.Class.define("testrunner.test.DemoTest",
       this.wait();
     },
     
+    "@require testSsl" : ["ssl"],
     testSsl : function() {
-      this.require(["ssl"], function() {
-        this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
-      }, this);
-    }    
+       this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
+    }
   }
 });

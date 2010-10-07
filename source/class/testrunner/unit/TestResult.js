@@ -33,6 +33,20 @@ qx.Class.define("testrunner.unit.TestResult", {
       }
 
       this.fireDataEvent("startTest", test);
+      
+      try {
+        var require = test.getTestClass()["@require " + test.getName()];
+        if (require) {
+          test.getTestClass().require(require);
+        }
+      } catch(ex) {
+        if (ex.classname == "testrunner.unit.RequirementError") {
+          this.__createError("skip", ex, test);
+        } else {
+          this.__createError("failure", ex, test);
+        }
+        return;
+      }
 
       if (this.__timeout[test.getFullName()])
       {
@@ -96,8 +110,6 @@ qx.Class.define("testrunner.unit.TestResult", {
             test.tearDown();
           } catch(except) {}
           this.__createError("failure", ex, test);
-        } else if (ex.classname == "testrunner.unit.RequirementError") {
-          this.__createError("skip", ex, test);
         } else {
           try {
             test.tearDown();

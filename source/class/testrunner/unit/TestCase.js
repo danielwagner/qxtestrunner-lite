@@ -34,15 +34,16 @@ qx.Class.define("testrunner.unit.TestCase", {
   
   members :
   {
-    require : function(featureList, testFunction, context)
-    {
+    require : function(featureList) {
       for (var i=0,l=featureList.length; i<l; i++) {
         var feature = featureList[i];
-        var hasMethodName = "has" + qx.lang.String.capitalize(feature); 
-        if (this[hasMethodName]
-            && this[hasMethodName]()) {
-          testFunction.call(context);
-        } else {
+        var hasMethodName = "has" + qx.lang.String.capitalize(feature);
+        
+        if (!this[hasMethodName]) {
+          throw new Error('Unable to verify requirement: No method "' + hasMethodName + '" found');          
+        }
+        
+        if (!this[hasMethodName]()) {
           throw new testrunner.unit.RequirementError(feature);
         }
       }

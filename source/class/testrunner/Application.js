@@ -30,6 +30,15 @@ qx.Class.define("testrunner.Application",
 {
   extend : qx.application.Native,
 
+  properties :
+  {
+    testSuiteState :
+    {
+      init : "init",
+      check : [ "init", "loading", "ready", "running", "finished", "aborted", "error" ],
+      event : "changeState"
+    }
+  },
 
 
   /*
@@ -65,13 +74,14 @@ qx.Class.define("testrunner.Application",
       this.view = new testrunner.view.Html();
       //this.view = new testrunner.view.Console();
       this.view.addListener("runTests", this.runTests, this);
+      this.bind("testSuiteState", this.view, "testSuiteState");
       
       this._loadInlineTests();
     },
     
     _loadInlineTests : function()
     {
-      this.view.setStatus(["Loading test suite..."]);
+      this.setTestSuiteState("loading");
       this.loader = new qx.dev.unit.TestLoaderInline();
       this.loader.setTestNamespace(qx.core.Setting.get("qx.testNameSpace"));
       this.__getTestData();
@@ -79,6 +89,7 @@ qx.Class.define("testrunner.Application",
     
     _loadIframeTests : function()
     {
+      this.setTestSuiteState("loading");
       this.runButton.style.visibility = "hidden";
       var autElem = document.getElementById("aut");
       this._iframe = qx.bom.Iframe.create({id : "autframe"});
@@ -108,17 +119,19 @@ qx.Class.define("testrunner.Application",
       }
       
       this.testList.sort();
+      this.setTestSuiteState("ready");
       this.view.setStatus([testCount + " tests ready to run."]);
     },
     
     runTests : function()
     {
+      this.setTestSuiteState("running");
       if (document.body.childNodes.length == 0) {
         console.log(this.currentTestData.getName() + " broke the DOM!");
         return;
       }
       if (this.testList.length == 0) {
-        this.view.setStatus(["All done."]);
+        this.setTestSuiteState("finished");
         return;
       };
       
@@ -212,11 +225,10 @@ qx.Class.define("testrunner.Application",
         }
       }
       else {
-        this.view.setStatus(["Couldn't load test suite!", "error"]);
+        this.setTestSuiteState("error");
         return;
       }
       
-      this.view.setStatus(["Test suite loaded."]);
       this.__getTestData();
     }
   }

@@ -34,6 +34,11 @@ qx.Class.define("testrunner.view.Abstract", {
     {
       check : "Array",
       apply : "_applyStatus"
+    },
+    
+    testSuiteState :
+    {
+      apply : "_applyTestSuiteState"
     }
   },
   

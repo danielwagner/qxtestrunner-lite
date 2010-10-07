@@ -37,7 +37,7 @@ qx.Class.define("testrunner.view.Html", {
     var elemFooter = document.createElement("div");
     elemFooter.id = "qxtestrunner_footer";
     elemFooter.innerHTML = '<p id="qxtestrunner_status"></p>';
-    root.appendChild(elemFooter);    
+    root.appendChild(elemFooter);
     
     var runButton = document.getElementById("qxtestrunner_run");
     qx.event.Registration.addListener(runButton, "click", function(ev) {
@@ -63,6 +63,28 @@ qx.Class.define("testrunner.view.Html", {
       var lvl = value[1] || "info";
       this.__elemStatus.className = lvl;
       this.__elemStatus.innerHTML = msg;
+    },
+    
+    _applyTestSuiteState : function(value, old)
+    {
+      switch(value) 
+      {
+        case "loading" :
+          this.setStatus(["Loading tests..."]);
+          break;
+        case "ready" :
+          this.setStatus(["Test suite ready"]);
+          break;
+        case "running" :
+          this.setStatus(["Running tests..."]);
+          break;
+        case "finished" :
+          this.setStatus(["Test suite finished"]);
+          break;
+        case "aborted" :
+          this.setStatus(["Test run aborted"]);
+          break;
+      };
     },
     
     clearResults : function()

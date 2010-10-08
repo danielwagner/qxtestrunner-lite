@@ -69,7 +69,7 @@ qx.Class.define("testrunner.unit.TestResult", {
 
       if (this.__timeout[test.getFullName()])
       {
-        if (!this.__timeout[test.getFullName()] !== "failed") {
+        if (this.__timeout[test.getFullName()] !== "failed") {
           this.__timeout[test.getFullName()].stop();
         }
         delete this.__timeout[test.getFullName()];

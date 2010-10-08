@@ -82,7 +82,6 @@ qx.Class.define("testrunner.runner.TestRunner", {
     _loadIframeTests : function()
     {
       this.setTestSuiteState("loading");
-      this.runButton.style.visibility = "hidden";
       var autElem = document.getElementById("aut");
       this._iframe = qx.bom.Iframe.create({id : "autframe"});
       autElem.appendChild(this._iframe);

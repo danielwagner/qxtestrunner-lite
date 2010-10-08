@@ -38,7 +38,9 @@ qx.Class.define("testrunner.view.Abstract", {
     
     testSuiteState :
     {
-      apply : "_applyTestSuiteState"
+      init : "init",
+      apply : "_applyTestSuiteState",
+      event : "changeTestSuiteState"
     },
     
     testCount :

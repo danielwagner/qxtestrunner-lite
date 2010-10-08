@@ -39,8 +39,8 @@ qx.Class.define("testrunner.view.Html", {
     elemFooter.innerHTML = '<p id="qxtestrunner_status"></p>';
     root.appendChild(elemFooter);
     
-    var runButton = document.getElementById("qxtestrunner_run");
-    qx.event.Registration.addListener(runButton, "click", function(ev) {
+    this.__runButton = document.getElementById("qxtestrunner_run");
+    qx.event.Registration.addListener(this.__runButton, "click", function(ev) {
       this.fireEvent("runTests");
     }, this);
     
@@ -71,18 +71,23 @@ qx.Class.define("testrunner.view.Html", {
       {
         case "loading" :
           this.setStatus(["Loading tests..."]);
+          this.__runButton.disabled = true;
           break;
         case "ready" :
           this.setStatus(["Test suite ready"]);
+          this.__runButton.disabled = false;
           break;
         case "running" :
           this.setStatus(["Running tests..."]);
+          this.__runButton.disabled = true;
           break;
         case "finished" :
           this.setStatus(["Test suite finished"]);
+          this.__runButton.disabled = true;
           break;
         case "aborted" :
           this.setStatus(["Test run aborted"]);
+          this.__runButton.disabled = true;
           break;
       };
     },

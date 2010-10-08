@@ -27,7 +27,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
     if (qx.core.Variant.isSet("testrunner.view", "console")) {
       this.view = new testrunner.view.Console();
     } else {
-      this.view = new testrunner.view.Html(null, true);
+      var createFrame = qx.core.Variant.isSet("testrunner.testOrigin", "iframe");
+      this.view = new testrunner.view.Html(null, createFrame);
     }
     
     // Connect view and controller

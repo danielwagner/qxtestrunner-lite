@@ -22,7 +22,7 @@
 /**
  * Data class which hold all data of a test run.
  */
-qx.Class.define("testrunner.TestResultData",
+qx.Class.define("testrunner.runner.TestResultData",
 {
   extend : qx.core.Object,
 

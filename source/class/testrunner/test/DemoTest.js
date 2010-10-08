@@ -41,6 +41,7 @@ qx.Class.define("testrunner.test.DemoTest",
     ---------------------------------------------------------------------------
     */
   
+    
     setUp : function()
     {
       var div = document.createElement("div");
@@ -53,6 +54,7 @@ qx.Class.define("testrunner.test.DemoTest",
 
     tearDown : function() {
       document.body.removeChild(this._el);
+      delete this._el;
     },
 
     testSuccess : function()
@@ -67,7 +69,25 @@ qx.Class.define("testrunner.test.DemoTest",
       this.debug("Executed code after failed assertion!");
     },
     
-    testAsync : function()
+    testAsyncSimple : function()
+    {
+      var self = this;
+      this.info("Setting timeout");
+      window.setTimeout(function() {
+        self.resume(function() {
+          this.info("Async test OK");
+        }, self);
+      }, 1000);
+
+      this.wait();
+    },
+    
+    "@require testSsl" : ["ssl"],
+    testSsl : function() {
+       this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
+    },
+    
+    testAsyncBom : function()
     {
       qx.event.Registration.addListener(this._el, "focus", function() {
         this.resume(function() {
@@ -79,13 +99,8 @@ qx.Class.define("testrunner.test.DemoTest",
       window.setTimeout(function(){
         qx.bom.Element.focus(self._el);
       }, 2000);
-
+      
       this.wait();
-    },
-    
-    "@require testSsl" : ["ssl"],
-    testSsl : function() {
-       this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
     }
   }
 });

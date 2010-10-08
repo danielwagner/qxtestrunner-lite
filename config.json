@@ -64,26 +64,33 @@
         "qx.application" : "${APPLICATION}.Application",
         "qx.testNameSpace" : "${APPLICATION}.test"
         //"qx.testNameSpace" : "qx.test.bom"
+      },
+      
+      "variants" :
+      {
+        "testrunner.view" : ["console", "html"],
+        "testrunner.testOrigin" : ["iframe", "inline"]
       }
-    },
-    
-    "=build" :
-    {
-      "run" : ["testrunnerlite::build-hybrid"]
     },
     
     "source-script" :
     {
-      "variants" :
-      {
-        "testrunner.view" : ["console", "html"]
-      },
-      
       "compile-options" :
       {
         "paths" :
         {
-          "file" : "${ROOT}/source/script/${APPLICATION}-{testrunner.view}.js"
+          "file" : "${ROOT}/source/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
+        }
+      }
+    },
+    
+    "build-script" :
+    {
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${BUILD_PATH}/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
         }
       }
     }

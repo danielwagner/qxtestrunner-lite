@@ -29,12 +29,18 @@ qx.Class.define("testrunner.runner.TestRunner", {
     } else {
       this.view = new testrunner.view.Html();
     }
-          
+    
+    // Connect view and controller
     this.view.addListener("runTests", this.runTests, this);
     this.bind("testSuiteState", this.view, "testSuiteState");
     this.bind("testCount", this.view, "testCount");
     
-    this._loadInlineTests();
+    // Load unit tests
+    if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {
+      this._loadIframeTests();
+    } else {
+      this._loadInlineTests();
+    }
   },
   
   properties :

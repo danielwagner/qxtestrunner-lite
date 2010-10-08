@@ -59,5 +59,10 @@ qx.Class.define("testrunner.Application",
 
       this.runner = new testrunner.runner.TestRunner();
     }
+  },
+  
+  destruct : function()
+  {
+    this._disposeObjects("runner");
   }
 });

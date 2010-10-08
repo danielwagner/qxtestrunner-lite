@@ -27,7 +27,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
     if (qx.core.Variant.isSet("testrunner.view", "console")) {
       this.view = new testrunner.view.Console();
     } else {
-      this.view = new testrunner.view.Html();
+      this.view = new testrunner.view.Html(null, true);
     }
     
     // Connect view and controller
@@ -82,11 +82,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
     _loadIframeTests : function()
     {
       this.setTestSuiteState("loading");
-      var autElem = document.getElementById("aut");
-      this._iframe = qx.bom.Iframe.create({id : "autframe"});
-      autElem.appendChild(this._iframe);
+      this._iframe = this.view.getIframe();
       qx.event.Registration.addListener(this._iframe, "load", this._onLoadIframe, this);
-      qx.bom.Iframe.setSource(this._iframe, "../test/html/tests-source.html?testclass=qx.test");
+      var src = "../test/html/tests.html?testclass=" + qx.core.Setting.get("qx.testNameSpace")
+      qx.bom.Iframe.setSource(this._iframe, src);
     },
     
     __getTestData : function()
@@ -137,11 +136,15 @@ qx.Class.define("testrunner.runner.TestRunner", {
     
     __initTestResult : function()
     {
+      /* TODO: Check if this is really necessary
       if (this.frameWindow) {
         var testResult = new this.frameWindow.testrunner.unit.TestResult();
       } else {
         var testResult = new testrunner.unit.TestResult();
       }
+      */
+      
+      var testResult = new testrunner.unit.TestResult();
       
       testResult.addListener("startTest", function(e) {
         var test = e.getData();

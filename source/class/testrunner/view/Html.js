@@ -21,13 +21,20 @@ qx.Class.define("testrunner.view.Html", {
 
   extend : testrunner.view.Abstract,
   
-  construct : function(rootElement)
+  construct : function(rootElement, autIframe)
   {
     var root = rootElement || document.body;
     var elemControls = document.createElement("div");
     elemControls.id = "qxtestrunner_controls";
     elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input>';
     root.appendChild(elemControls);
+    
+    if (autIframe) {
+      var elemAut = document.createElement("div");
+      elemAut.id = "qxtestrunner_aut";
+      this.__elemIframe = qx.bom.Iframe.create({id : "qxtestrunner_autframe"});
+      root.appendChild(this.__elemIframe);
+    }
     
     var elemResults = document.createElement("div");
     elemResults.id = "qxtestrunner_results";
@@ -52,6 +59,7 @@ qx.Class.define("testrunner.view.Html", {
   {
     __elemStatus : null,
     __elemResultsList : null,
+    __elemIframe : null,
     
     _applyStatus : function(value, old)
     {
@@ -137,6 +145,11 @@ qx.Class.define("testrunner.view.Html", {
       var id = testName.replace(/\./g, "");
       id = id.replace(/\:/g, "");
       return id;
+    },
+    
+    getIframe : function()
+    {
+      return this.__elemIframe;
     }
   }
   

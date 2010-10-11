@@ -32,7 +32,7 @@ qx.Class.define("testrunner.view.Abstract", {
   {
     status :
     {
-      check : "Array",
+      check : "String",
       apply : "_applyStatus"
     },
     

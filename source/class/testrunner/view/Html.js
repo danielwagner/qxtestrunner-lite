@@ -66,11 +66,8 @@ qx.Class.define("testrunner.view.Html", {
       if (!value[0] || (value === old)) {
         return;
       }
-      
-      var msg = value[0];
-      var lvl = value[1] || "info";
-      this.__elemStatus.className = lvl;
-      this.__elemStatus.innerHTML = msg;
+            
+      this.__elemStatus.innerHTML = value;
     },
     
     _applyTestSuiteState : function(value, old)
@@ -78,23 +75,23 @@ qx.Class.define("testrunner.view.Html", {
       switch(value) 
       {
         case "loading" :
-          this.setStatus(["Loading tests..."]);
+          this.setStatus("Loading tests...");
           this.__runButton.disabled = true;
           break;
         case "ready" :
-          this.setStatus(["Test suite ready"]);
+          this.setStatus("Test suite ready");
           this.__runButton.disabled = false;
           break;
         case "running" :
-          this.setStatus(["Running tests..."]);
+          this.setStatus("Running tests...");
           this.__runButton.disabled = true;
           break;
         case "finished" :
-          this.setStatus(["Test suite finished"]);
+          this.setStatus("Test suite finished");
           this.__runButton.disabled = true;
           break;
         case "aborted" :
-          this.setStatus(["Test run aborted"]);
+          this.setStatus("Test run aborted");
           this.__runButton.disabled = true;
           break;
       };
@@ -106,10 +103,10 @@ qx.Class.define("testrunner.view.Html", {
       switch(suiteState)
       {
         case "ready" :
-          this.setStatus([value + " tests ready to run"]);
+          this.setStatus(value + " tests ready to run");
           break;
         case "running" :
-          this.setStatus([value + " tests pending"]);
+          this.setStatus(value + " tests pending");
           break;
       };
     },

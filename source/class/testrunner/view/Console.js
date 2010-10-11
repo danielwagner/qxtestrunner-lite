@@ -35,10 +35,7 @@ qx.Class.define("testrunner.view.Console", {
         return;
       }
       
-      var msg = value[0];
-      var lvl = value[1] || "info";
-      
-      console.log(msg);
+      console.log(value);
     },
     
     _applyTestSuiteState : function(value, old)
@@ -46,19 +43,19 @@ qx.Class.define("testrunner.view.Console", {
       switch(value) 
       {
         case "loading" :
-          this.setStatus(["Loading tests..."]);
+          this.setStatus("Loading tests...");
           break;
         case "ready" :
-          this.setStatus(["Test suite ready"]);
+          this.setStatus("Test suite ready");
           break;
         case "running" :
-          this.setStatus(["Running tests..."]);
+          this.setStatus("Running tests...");
           break;
         case "finished" :
-          this.setStatus(["Test suite finished"]);
+          this.setStatus("Test suite finished");
           break;
         case "aborted" :
-          this.setStatus(["Test run aborted"]);
+          this.setStatus("Test run aborted");
           break;
       };
     },
@@ -69,7 +66,7 @@ qx.Class.define("testrunner.view.Console", {
       switch(suiteState)
       {
         case "ready" :
-          this.setStatus([value + " tests ready to run"]);
+          this.setStatus(value + " tests ready to run");
           break;
       };
     },

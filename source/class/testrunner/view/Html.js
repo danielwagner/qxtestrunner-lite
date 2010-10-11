@@ -17,10 +17,26 @@
 
 ************************************************************************ */
 
+/**
+ * Plain HTML TestRunner view.
+ */
 qx.Class.define("testrunner.view.Html", {
 
   extend : testrunner.view.Abstract,
   
+  
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  
+  /**
+   * @param rootElement {DOMElement?} DOM Element in which the result view 
+   * should be created. Default: document.body
+   * @param autIframe {Boolean} Whether an iframe for the AUT should be created.
+   * Default: false 
+   */
   construct : function(rootElement, autIframe)
   {
     var root = rootElement || document.body;
@@ -55,12 +71,24 @@ qx.Class.define("testrunner.view.Html", {
     this.__elemResultsList = document.getElementById("qxtestrunner_resultslist");
   },
   
+  
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
   members :
   {
     __elemStatus : null,
     __elemResultsList : null,
     __elemIframe : null,
     
+    
+    /**
+     * Displays a status message.
+     * @param value {String} The message to be displayed
+     * @param old {String} The previous status
+     */
     _applyStatus : function(value, old)
     {
       if (!value[0] || (value === old)) {
@@ -70,6 +98,14 @@ qx.Class.define("testrunner.view.Html", {
       this.__elemStatus.innerHTML = value;
     },
     
+    
+    /**
+     * Visualizes the current state of the test suite by displaying a status 
+     * message and showing/hiding the "run" button.
+     * 
+     * @param value {String} The test suite's status
+     * @param value {String} The previous status
+     */
     _applyTestSuiteState : function(value, old)
     {
       switch(value) 
@@ -97,6 +133,13 @@ qx.Class.define("testrunner.view.Html", {
       };
     },
     
+    
+    /**
+     * Displays the amount of pending tests.
+     * 
+     * @param value {Integer} Amount of pending tests
+     * @param old {Integer} Old value
+     */
     _applyTestCount : function(value, old)
     {
       var suiteState = this.getTestSuiteState();
@@ -111,11 +154,23 @@ qx.Class.define("testrunner.view.Html", {
       };
     },
     
+    
+    /**
+     * Empties the results display.
+     */
     clearResults : function()
     {
       this.__elemResultsList.innerHTML = "";
     },
     
+    
+    /**
+     * Visualizes the status of a single test result as it changes during test
+     * execution.
+     * 
+     * @param testResultData {testrunner.unit.TestResultData} test result data 
+     * object
+     */
     _onTestChangeState : function(testResultData) {
       var testName = testResultData.getName();
       var state = testResultData.getState();
@@ -137,6 +192,14 @@ qx.Class.define("testrunner.view.Html", {
       }
     },
           
+    
+    /**
+     * Simplifies a test function's fully qualified name so it can be used as an
+     * HTML ID.
+     * 
+     * @param testName {String} The test's full name
+     * @return {String} The ID string
+     */
     __testNameToId : function(testName)
     {
       var id = testName.replace(/\./g, "");
@@ -144,6 +207,11 @@ qx.Class.define("testrunner.view.Html", {
       return id;
     },
     
+    
+    /**
+     * Return the iframe element the AUT should be loaded in.
+     * @return {DOMElement} The iframe
+     */
     getIframe : function()
     {
       return this.__elemIframe;

@@ -17,10 +17,26 @@
 
 ************************************************************************ */
 
+/**
+ * This error is thrown by the unit test class if an infrastructure requirement
+ * is not met. The unit testing framework should skip the test and visually mark
+ * the test as not having been executed.
+ */
 qx.Class.define("testrunner.unit.RequirementError", {
 
   extend : Error,
   
+  
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  
+  /**
+   * @param requirement {String} The requirement ID, e.g. "SSL"
+   * @param message {String?} Optional error message 
+   */
   construct : function(requirement, message) {
     
     this.__message = message || "Requirement not met";
@@ -30,15 +46,33 @@ qx.Class.define("testrunner.unit.RequirementError", {
     
   },
   
+  
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
   members : 
   {
     __requirement : null,
     
+    
+    /**
+     * Returns the ID of the requirement that was not satisfied.
+     * 
+     * @return {String} The requirement ID
+     */
     getRequirement : function()
     {
       return this.__requirement;
     },
     
+    
+    /**
+     * Returns a string representation of the error.
+     * 
+     * @return {String} Error message
+     */
     toString : function()
     {
       return this.__message + ": " + this.__requirement;

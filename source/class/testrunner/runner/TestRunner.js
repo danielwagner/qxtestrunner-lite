@@ -17,10 +17,20 @@
 
 ************************************************************************ */
 
+/**
+ * The TestRunner is responsible for loading the test classes and keeping track
+ * of the test suite's state. 
+ */
 qx.Class.define("testrunner.runner.TestRunner", {
 
   extend : qx.core.Object,
+
   
+  /*
+  *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
   construct : function()
   {
     // Create view
@@ -43,9 +53,17 @@ qx.Class.define("testrunner.runner.TestRunner", {
       this._loadInlineTests();
     }
   },
-  
+
+
+  /*
+  *****************************************************************************
+     PROPERTIES
+  *****************************************************************************
+  */
+
   properties :
   {
+    /** Current state of the test suite */
     testSuiteState :
     {
       init : "init",
@@ -53,6 +71,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
       event : "changeTestSuiteState"
     },
     
+    /** Number of tests that haven't run yet */
     testCount :
     {
       init : 0,
@@ -60,7 +79,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
       event : "changeTestCount"
     }
   },
-  
+
+
   /*
   *****************************************************************************
      MEMBERS
@@ -72,6 +92,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
     __loadTimer : null,
     __loadAttempts : null,  
   
+    
+    /**
+     * Loads test classes that are a part of the TestRunner application.
+     */
     _loadInlineTests : function()
     {
       this.setTestSuiteState("loading");
@@ -80,6 +104,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
       this.__getTestData();
     },
     
+    
+    /**
+     * Loads test classes from a standalone test application using an iframe.
+     */
     _loadIframeTests : function()
     {
       this.setTestSuiteState("loading");
@@ -89,6 +117,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
       qx.bom.Iframe.setSource(this._iframe, src);
     },
     
+    
+    /**
+     * Stores test names in a list.
+     */
     __getTestData : function()
     {
       var testRep = this.loader.getTestDescriptions();
@@ -114,6 +146,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
       this.setTestCount(testCount);
     },
     
+    
+    /**
+     * Runs all tests in the list.
+     */
     runTests : function()
     {
       this.setTestSuiteState("running");
@@ -135,6 +171,11 @@ qx.Class.define("testrunner.runner.TestRunner", {
       this.loader.runTests(testResult, className, functionName);
     },
     
+    
+    /**
+     * Creates the TestResult object that will run the actual test functions.
+     * @return {testrunner.unit.TestResult} The configured TestResult object
+     */
     __initTestResult : function()
     {
       /* TODO: Check if this is really necessary
@@ -191,6 +232,12 @@ qx.Class.define("testrunner.runner.TestRunner", {
       return testResult;
     },
     
+    
+    /**
+     * Waits until the test application in the iframe has finished loading, then
+     * retrieves its TestLoader.
+     * @param ev {qx.event.type.Event} Iframe's "load" event
+     */
     _onLoadIframe : function(ev)
     {
       if (!this.__loadAttempts) {

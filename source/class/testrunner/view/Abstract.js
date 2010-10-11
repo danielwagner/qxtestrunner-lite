@@ -17,25 +17,45 @@
 
 ************************************************************************ */
 
+/**
+ * Common base class for TestRunner views.
+ */
 qx.Class.define("testrunner.view.Abstract", {
 
   type : "abstract",
   
   extend : qx.core.Object,
   
+
+  /*
+  *****************************************************************************
+     EVENTS
+  *****************************************************************************
+  */
+  
   events :
   {
+    /** Event fired to instruct the TestRunner to start running the test suite */
     runTests : "qx.event.type.Event"
   },
   
+  
+  /*
+  *****************************************************************************
+     PROPERTIES
+  *****************************************************************************
+  */
   properties :
   {
+    /** Status message to be displayed in the view */
     status :
     {
       check : "String",
       apply : "_applyStatus"
     },
     
+    /** The test suite's current state, bound to 
+      {@link testrunner.runner.TestRunner#testSuiteState} */
     testSuiteState :
     {
       init : "init",
@@ -43,14 +63,26 @@ qx.Class.define("testrunner.view.Abstract", {
       event : "changeTestSuiteState"
     },
     
+    /** Number of configured tests that haven't run yet. */
     testCount :
     {
       apply : "_applyTestCount"
     }
   },
   
+  
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
   members :
   {
+    /**
+     * Add a listener to a TestResultData object to be informed of state changes.
+     * @param testResultData {testrunner.unit.TestResultData} 
+     * Test result data object
+     */
     addTestResult : function(testResultData)
     {
       testResultData.addListener("changeState", function(ev) {
@@ -58,6 +90,12 @@ qx.Class.define("testrunner.view.Abstract", {
       }, this);
     },
     
+    
+    /**
+     * Visualize TestResultData state changes.
+     * @param testResultData {testrunner.unit.TestResultData} 
+     * Test result data object
+     */
     _onTestChangeState : function(testResultData)
     {
       this.error("Missing implementation of __onTestChangeState!");

@@ -17,18 +17,38 @@
 
 ************************************************************************ */
 
+/**
+ * Simple, console-only TestRunner view. Use 
+ * qx.core.Init.getApplication().runner.view.run() to run the test suite.
+ */
 qx.Class.define("testrunner.view.Console", {
 
   extend : testrunner.view.Abstract,
   
+  
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
   members :
   {
     
+    /**
+     * Tells the TestRunner to run all configured tests.
+     */
     run : function()
     {
       this.fireEvent("runTests");
     },
     
+    
+    /**
+     * Writes a status message to the browser's logging console.
+     * 
+     * @param value {String} New status value
+     * @param old {String} Previous status value
+     */
     _applyStatus : function(value, old)
     {
       if (!value[0] || (value === old)) {
@@ -38,6 +58,13 @@ qx.Class.define("testrunner.view.Console", {
       console.log(value);
     },
     
+    
+    /**
+     * Log the test suite's current status.
+     * 
+     * @param value {String} New testSuiteState
+     * @param value {String} Previous testSuiteState 
+     */
     _applyTestSuiteState : function(value, old)
     {
       switch(value) 
@@ -60,6 +87,13 @@ qx.Class.define("testrunner.view.Console", {
       };
     },
     
+    
+    /**
+     * Logs the amount of loaded test functions.
+     * 
+     * @param value {Integer} Amount of tests
+     * @param old {Integer} Previous value
+     */
     _applyTestCount : function(value, old)
     {
       var suiteState = this.getTestSuiteState();
@@ -71,6 +105,13 @@ qx.Class.define("testrunner.view.Console", {
       };
     },
     
+    
+    /**
+     * Logs state changes in testResultData objects. 
+     * 
+     * @param testResultData {testrunner.unit.TestResultData} Test result data
+     * object
+     */
     _onTestChangeState : function(testResultData)
     {
       var testName = testResultData.getName();

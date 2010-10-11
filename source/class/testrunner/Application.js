@@ -24,7 +24,7 @@
 ************************************************************************ */
 
 /**
- * This is the main application class of your custom application "testrunner"
+ * TestRunner main application class.
  */
 qx.Class.define("testrunner.Application",
 {
@@ -39,10 +39,7 @@ qx.Class.define("testrunner.Application",
 
   members :
   {
-    /**
-     * This method contains the initial application code and gets called 
-     * during startup of the application
-     */
+    
     main : function()
     {
       // Call super class
@@ -60,7 +57,14 @@ qx.Class.define("testrunner.Application",
       this.runner = new testrunner.runner.TestRunner();
     }
   },
-  
+
+
+  /*
+  *****************************************************************************
+     DESTRUCTOR
+  *****************************************************************************
+  */
+
   destruct : function()
   {
     this._disposeObjects("runner");

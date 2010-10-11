@@ -20,7 +20,7 @@
 ************************************************************************ */
 
 /**
- * Data class which hold all data of a test run.
+ * Data class which holds all data of a test run.
  */
 qx.Class.define("testrunner.runner.TestResultData",
 {
@@ -34,6 +34,9 @@ qx.Class.define("testrunner.runner.TestResultData",
   *****************************************************************************
   */
 
+  /**
+   * @param testName {String} The test's name
+   */
   construct : function(testName)
   {
     this.base(arguments);
@@ -50,8 +53,10 @@ qx.Class.define("testrunner.runner.TestResultData",
 
   properties :
   {
+    /** The test's name */    
     name : { check : "String" },
 
+    /** The test's current state */
     state :
     {
       check : [ "start", "wait", "skip", "error", "failure", "success" ],
@@ -59,13 +64,11 @@ qx.Class.define("testrunner.runner.TestResultData",
       event : "changeState"
     },
 
+    /** Exception thrown by the test code */
     exception : { nullable : true }
   },
 
-
-
-
-
+  
   /*
   *****************************************************************************
      MEMBERS
@@ -106,9 +109,9 @@ qx.Class.define("testrunner.runner.TestResultData",
 
 
     /**
-     * TODOC
+     * Returns stack trace information for the current exception.
      *
-     * @return {var} TODOC
+     * @return {String} Stack trace information
      */
     getStackTrace : function()
     {

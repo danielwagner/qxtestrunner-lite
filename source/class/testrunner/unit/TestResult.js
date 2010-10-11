@@ -17,10 +17,24 @@
 
 ************************************************************************ */
 
+/**
+ * This TestResultData class does not throw exceptions raised by test code,
+ * instead storing them in an array attached to the test function itself. This
+ * ensures that the entire body of each test function is executed.
+ * 
+ * It also supports an additional "skipped" state for tests that aren't run 
+ * because infrastructure requirements are not met.
+ */
 qx.Class.define("testrunner.unit.TestResult", {
 
   extend : qx.dev.unit.TestResult,
   
+  
+  /*
+  *****************************************************************************
+     EVENTS
+  *****************************************************************************
+  */
   events :
   {
     /**
@@ -31,6 +45,12 @@ qx.Class.define("testrunner.unit.TestResult", {
     skip : "qx.event.type.Data"
   },
   
+  
+  /*
+  *****************************************************************************
+     MEMBERS
+  *****************************************************************************
+  */
   members :
   {
     run : function(test, testFunction, self, resume)

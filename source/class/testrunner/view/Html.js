@@ -39,10 +39,14 @@ qx.Class.define("testrunner.view.Html", {
    */
   construct : function(rootElement, autIframe)
   {
-    var root = rootElement || document.body;
+    var root = this.__rootElement = rootElement || document.body;
     var elemControls = document.createElement("div");
     elemControls.id = "qxtestrunner_controls";
-    elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input>';
+    elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input><br/>';
+    
+    var stackToggle = qx.bom.Input.create("checkbox", {id: "qxtestrunner_togglestack", checked: "checked"});
+    elemControls.appendChild(stackToggle);
+    elemControls.innerHTML += '<label for="qxtestrunner_togglestack">Show stack trace</label>';
     root.appendChild(elemControls);
     
     if (autIframe) {
@@ -67,8 +71,31 @@ qx.Class.define("testrunner.view.Html", {
       this.fireEvent("runTests");
     }, this);
     
+    // Why is this necessary?
+    stackToggle = document.getElementById("qxtestrunner_togglestack");
+    qx.event.Registration.addListener(stackToggle, "change", function(ev) {
+      this.setShowStack(ev.getData());
+    }, this);
+    
     this.__elemStatus = document.getElementById("qxtestrunner_status");
     this.__elemResultsList = document.getElementById("qxtestrunner_resultslist");
+  },
+  
+  
+  /*
+  *****************************************************************************
+     PROPERTIES
+  *****************************************************************************
+  */
+  properties :
+  {
+    /** Controls the display of stack trace information for exceptions */
+    showStack :
+    {
+      check : "Boolean",
+      init : true,
+      apply : "_applyShowStack"
+    }
   },
   
   
@@ -82,7 +109,7 @@ qx.Class.define("testrunner.view.Html", {
     __elemStatus : null,
     __elemResultsList : null,
     __elemIframe : null,
-    
+    __rootElement : null,
     
     /**
      * Displays a status message.
@@ -189,6 +216,12 @@ qx.Class.define("testrunner.view.Html", {
       
       if (exception) {
         listItem.innerHTML += '<br/>' + exception;
+
+        var trace = testResultData.getStackTrace();
+        if (trace.length > 0) {
+          listItem.innerHTML += '<div class="stacktrace">Stack Trace:<br/>' + trace + '</div>';
+        }
+        
       }
     },
           
@@ -215,6 +248,28 @@ qx.Class.define("testrunner.view.Html", {
     getIframe : function()
     {
       return this.__elemIframe;
+    },
+    
+    
+    /**
+     * Sets the "display" style attribute of all nodes with the css class 
+     * "stacktrace" according to the value of showStack. 
+     * 
+     * @param value {Boolean} Incoming property value
+     * @param value {Boolean} Previous property value
+     */
+    _applyShowStack : function(value, old)
+    {
+      if (value == old) {
+        return;
+      }
+      
+      var display = value ? "block" : "none";
+      
+      var traceElems = qx.bom.Selector.query(".stacktrace", this.__rootElement);
+      for (var i=0,l=traceElems.length; i<l; i++) {
+        qx.bom.element.Style.set(traceElems[i], "display", display);
+      }
     }
   }
   

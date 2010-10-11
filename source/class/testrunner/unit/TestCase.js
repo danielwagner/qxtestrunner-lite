@@ -18,8 +18,7 @@
 ************************************************************************ */
 
 /**
- * Base class for unit tests. Supports verification of infrastructure 
- * requirements such as SSL. Wraps assertion methods so that assertion 
+ * Base class for unit tests. Wraps assertion methods so that assertion 
  * exceptions are stored in an array and attached to the function that called 
  * the assertion instead of being thrown.
  */
@@ -64,46 +63,6 @@ qx.Class.define("testrunner.unit.TestCase", {
         this[prop].originalName = originalName;
       }
     }    
-  },
-  
-  
-  /*
-  *****************************************************************************
-     MEMBERS
-  *****************************************************************************
-  */
-  members :
-  {
-    /**
-     * Verifies a list of infrastructure requirements by checking for 
-     * corresponding "has" methods. Throws RequirementErrors for unmet 
-     * requirements.
-     * 
-     * @param featureList {String[]} List of infrastructure requirements
-     */
-    require : function(featureList) {
-      for (var i=0,l=featureList.length; i<l; i++) {
-        var feature = featureList[i];
-        var hasMethodName = "has" + qx.lang.String.capitalize(feature);
-        
-        if (!this[hasMethodName]) {
-          throw new Error('Unable to verify requirement: No method "' + hasMethodName + '" found');          
-        }
-        
-        if (!this[hasMethodName]()) {
-          throw new testrunner.unit.RequirementError(feature);
-        }
-      }
-    },
-    
-    /**
-     * Checks if the test application has been loaded over HTTPS.
-     * 
-     * @return {Boolean} Whether SSL is currently used
-     */
-    hasSsl : function()
-    {
-      return qx.bom.client.Feature.SSL;
-    }
   }
+  
 });

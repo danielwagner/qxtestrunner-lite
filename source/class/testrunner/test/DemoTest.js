@@ -32,6 +32,9 @@
 qx.Class.define("testrunner.test.DemoTest",
 {
   extend : testrunner.unit.TestCase,
+  
+  include : [testrunner.unit.MRequirements],
+  
 
   members :
   {

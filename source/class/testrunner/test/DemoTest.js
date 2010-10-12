@@ -55,7 +55,6 @@ qx.Class.define("testrunner.test.DemoTest",
       this.info("common tearDown");
     },
 
-    /*
     testSuccess : function()
     {
       this.assertEquals(4, 3+1, "This should never fail!");
@@ -87,7 +86,6 @@ qx.Class.define("testrunner.test.DemoTest",
     testSsl : function() {
        this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
     },
-    */
     
     testAsyncBom : function()
     {

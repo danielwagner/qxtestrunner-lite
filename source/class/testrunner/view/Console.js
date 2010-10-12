@@ -28,6 +28,18 @@ qx.Class.define("testrunner.view.Console", {
   
   /*
   *****************************************************************************
+     CONSTRUCTOR
+  *****************************************************************************
+  */
+  
+  construct : function()
+  {
+    qx.log.appender.Native;
+    qx.log.appender.Console;
+  },
+  
+  /*
+  *****************************************************************************
      MEMBERS
   *****************************************************************************
   */
@@ -63,7 +75,7 @@ qx.Class.define("testrunner.view.Console", {
         return;
       }
       
-      console.log(value);
+      this.info(value);
     },
     
     
@@ -126,7 +138,7 @@ qx.Class.define("testrunner.view.Console", {
       var state = testResultData.getState();
       var exception =  testResultData.getException();
       
-      console.log(testName + " : " + state);
+      this.info(testName + " : " + state);
     }
   }
 });

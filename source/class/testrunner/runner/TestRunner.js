@@ -158,7 +158,6 @@ qx.Class.define("testrunner.runner.TestRunner", {
     runTests : function()
     {
       if (this.getTestSuiteState() == "aborted") {
-        alert("stop");
         return;
       }
       

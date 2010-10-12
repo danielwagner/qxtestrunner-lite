@@ -164,8 +164,8 @@ qx.Class.define("testrunner.view.Html", {
           this.__stopButton.disabled = true;
           break;
         case "aborted" :
-          this.setStatus("Test run aborted");
-          this.__runButton.disabled = true;
+          this.setStatus("Test run stopped");
+          this.__runButton.disabled = false;
           this.__stopButton.disabled = true;
           break;
       };

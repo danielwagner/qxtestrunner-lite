@@ -43,8 +43,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
     
     // Connect view and controller
     this.view.addListener("runTests", function() {
-      this.runTests();      
+      this.setTestSuiteState("running");
+      this.runTests();
     }, this);
+    
     this.view.addListener("stopTests", function() { 
       this.setTestSuiteState("aborted"); 
     }, this);
@@ -161,9 +163,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
         return;
       }
       
-      this.setTestSuiteState("running");
       if (document.body.childNodes.length == 0) {
-        console.log(this.currentTestData.getName() + " broke the DOM!");
+        this.warn(this.currentTestData.getName() + " broke the DOM!");
         return;
       }
       if (this.testList.length == 0) {

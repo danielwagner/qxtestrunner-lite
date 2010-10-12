@@ -47,19 +47,15 @@ qx.Class.define("testrunner.test.DemoTest",
     
     setUp : function()
     {
-      var div = document.createElement("div");
-      div.id = "el";
-
-      this._el = div;
-      document.body.appendChild(div);
+      
     },
 
 
     tearDown : function() {
-      document.body.removeChild(this._el);
-      delete this._el;
+      this.info("common tearDown");
     },
 
+    /*
     testSuccess : function()
     {
       this.assertEquals(4, 3+1, "This should never fail!");
@@ -85,13 +81,22 @@ qx.Class.define("testrunner.test.DemoTest",
       this.wait();
     },
     
+    
+    //"@require testSsl" : [ ["Opera", ">=", 9] ],
     "@require testSsl" : ["ssl"],
     testSsl : function() {
        this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
     },
+    */
     
     testAsyncBom : function()
     {
+      var div = document.createElement("div");
+      div.id = "el";
+
+      this._el = div;
+      document.body.appendChild(div);
+      
       qx.event.Registration.addListener(this._el, "focus", function() {
         this.resume(function() {
           this.info("Element focused.");
@@ -104,6 +109,14 @@ qx.Class.define("testrunner.test.DemoTest",
       }, 2000);
       
       this.wait();
+    },
+    
+    "@tearDown testAsyncBom" : function()
+    {
+      document.body.removeChild(this._el);
+      delete this._el;
+      this.info("test specific teardown for testAsyncBom");
     }
+    
   }
 });

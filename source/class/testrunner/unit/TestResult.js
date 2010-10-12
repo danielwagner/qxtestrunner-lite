@@ -102,11 +102,11 @@ qx.Class.define("testrunner.unit.TestResult", {
         catch(ex)
         {
           try {
-            test.tearDown();
+            this.callTearDown(test);
           }
           catch(ex) {
             /* Any exceptions here are likely caused by setUp having failed
-               previously, so we'll ignore them. */
+               previously, so we'll ignore them. */ 
           }
           var qxEx = new qx.type.BaseError("Error setting up test: " + ex.name, ex.message);
           this.__createError("error", qxEx, test);
@@ -146,12 +146,12 @@ qx.Class.define("testrunner.unit.TestResult", {
 
         } else if (ex.classname == "qx.core.AssertionError") {
           try {
-            test.tearDown();
+            this.callTearDown(test);
           } catch(except) {}
           this.__createError("failure", ex, test);
         } else {
           try {
-            test.tearDown();
+            this.callTearDown(test);
           } catch(except) {}
           this.__createError("error", ex, test);
         }
@@ -161,7 +161,7 @@ qx.Class.define("testrunner.unit.TestResult", {
       if (savedExceptions && savedExceptions.length > 0) {
         var error = true;
         try {
-          test.tearDown();
+          this.callTearDown(test);
         } catch(except) {}
         this.__createError("failure", savedExceptions[0], test);
       }
@@ -169,12 +169,29 @@ qx.Class.define("testrunner.unit.TestResult", {
       if (!error)
       {
         try {
-          test.tearDown();
+          this.callTearDown(test);
           this.fireDataEvent("endTest", test);
         } catch(ex) {
           var qxEx = new qx.type.BaseError("Error tearing down test: " + ex.name, ex.message);
           this.__createError("error", qxEx, test);
         }
+      }
+    },
+    
+    
+    /**
+     * Calls the test class' generic tearDown, then the test function's specific
+     * tearDown, if any.
+     * 
+     * @param test {Object} The test object (first argument of {@link #run})
+     */
+    callTearDown : function(test)
+    {
+      test.tearDown();
+      var testClass = test.getTestClass();
+      var specificTearDown = "@tearDown " + test.getName();
+      if (testClass[specificTearDown]) {
+        testClass[specificTearDown]();
       }
     }
   }

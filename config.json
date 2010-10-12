@@ -36,8 +36,9 @@
     "LOCALES"      : [ "en" ],
     "CACHE"        : "${TMPDIR}/cache",
     "ROOT"         : ".",
-    "TEST_INCLUDE" : "${APPLICATION}.test.*"
-    //"TEST_INCLUDE" : "qx.test.bom.*"
+    "TEST_NAMESPACE" : "${APPLICATION}.test",
+    //"TEST_NAMESPACE" : "qx.test.ui",
+    "TEST_INCLUDE" : "${TEST_NAMESPACE}.*"
   },
 
   // You only need to edit the remainder of this file, if you want to customize
@@ -53,6 +54,7 @@
         "${TEST_INCLUDE}"
       ],
       
+      /* Needed for framework ui/theme tests */
       "exclude" :
       [
         "qx.theme.*"
@@ -62,8 +64,8 @@
       {
         "qx.version"     : "1.3-pre",
         "qx.application" : "${APPLICATION}.Application",
-        "qx.testNameSpace" : "${APPLICATION}.test"
-        //"qx.testNameSpace" : "qx.test.bom"
+        "qx.testNameSpace" : "${TEST_NAMESPACE}"
+        //"qx.disposerDebugLevel" : "2"
       },
       
       "variants" :

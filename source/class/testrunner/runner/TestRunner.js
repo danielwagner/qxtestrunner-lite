@@ -42,7 +42,12 @@ qx.Class.define("testrunner.runner.TestRunner", {
     }
     
     // Connect view and controller
-    this.view.addListener("runTests", this.runTests, this);
+    this.view.addListener("runTests", function() {
+      this.runTests();      
+    }, this);
+    this.view.addListener("stopTests", function() { 
+      this.setTestSuiteState("aborted"); 
+    }, this);
     this.bind("testSuiteState", this.view, "testSuiteState");
     this.bind("testCount", this.view, "testCount");
     
@@ -152,6 +157,11 @@ qx.Class.define("testrunner.runner.TestRunner", {
      */
     runTests : function()
     {
+      if (this.getTestSuiteState() == "aborted") {
+        alert("stop");
+        return;
+      }
+      
       this.setTestSuiteState("running");
       if (document.body.childNodes.length == 0) {
         console.log(this.currentTestData.getName() + " broke the DOM!");

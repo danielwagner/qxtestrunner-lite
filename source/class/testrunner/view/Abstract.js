@@ -36,7 +36,10 @@ qx.Class.define("testrunner.view.Abstract", {
   events :
   {
     /** Event fired to instruct the TestRunner to start running the test suite */
-    runTests : "qx.event.type.Event"
+    runTests : "qx.event.type.Event",
+    
+    /** Event fired to instruct the TestRunner to stop running the test suite */
+    stopTests : "qx.event.type.Event"
   },
   
   

@@ -42,6 +42,14 @@ qx.Class.define("testrunner.view.Console", {
       this.fireEvent("runTests");
     },
     
+    /**
+     * Tells the TestRunner to stop running any pending tests.
+     */
+    stop : function()
+    {
+      this.fireEvent("stopTests");
+    },
+    
     
     /**
      * Writes a status message to the browser's logging console.

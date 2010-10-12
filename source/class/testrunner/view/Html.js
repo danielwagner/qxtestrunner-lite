@@ -42,7 +42,8 @@ qx.Class.define("testrunner.view.Html", {
     var root = this.__rootElement = rootElement || document.body;
     var elemControls = document.createElement("div");
     elemControls.id = "qxtestrunner_controls";
-    elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input><br/>';
+    elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input>';
+    elemControls.innerHTML += '<input type="submit" id="qxtestrunner_stop" value="Stop Tests"></input><br/>';
     
     var stackToggle = qx.bom.Input.create("checkbox", {id: "qxtestrunner_togglestack", checked: "checked"});
     elemControls.appendChild(stackToggle);
@@ -69,6 +70,11 @@ qx.Class.define("testrunner.view.Html", {
     this.__runButton = document.getElementById("qxtestrunner_run");
     qx.event.Registration.addListener(this.__runButton, "click", function(ev) {
       this.fireEvent("runTests");
+    }, this);
+    
+    this.__stopButton = document.getElementById("qxtestrunner_stop");
+    qx.event.Registration.addListener(this.__stopButton, "click", function(ev) {
+      this.fireEvent("stopTests");
     }, this);
     
     // Why is this necessary?
@@ -140,22 +146,27 @@ qx.Class.define("testrunner.view.Html", {
         case "loading" :
           this.setStatus("Loading tests...");
           this.__runButton.disabled = true;
+          this.__stopButton.disabled = true;
           break;
         case "ready" :
           this.setStatus("Test suite ready");
           this.__runButton.disabled = false;
+          this.__stopButton.disabled = true;
           break;
         case "running" :
           this.setStatus("Running tests...");
           this.__runButton.disabled = true;
+          this.__stopButton.disabled = false;
           break;
         case "finished" :
           this.setStatus("Test suite finished");
           this.__runButton.disabled = true;
+          this.__stopButton.disabled = true;
           break;
         case "aborted" :
           this.setStatus("Test run aborted");
           this.__runButton.disabled = true;
+          this.__stopButton.disabled = true;
           break;
       };
     },

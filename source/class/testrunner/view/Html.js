@@ -219,7 +219,13 @@ qx.Class.define("testrunner.view.Html", {
 
         var trace = testResultData.getStackTrace();
         if (trace.length > 0) {
-          listItem.innerHTML += '<div class="stacktrace">Stack Trace:<br/>' + trace + '</div>';
+          var stackDiv = document.createElement("div");
+          qx.bom.element.Class.add(stackDiv, "stacktrace");
+          stackDiv.innerHTML = 'Stack Trace:<br/>' + trace;
+          
+          var displayVal = this.getShowStack() ? "block" : "none";
+          qx.bom.element.Style.set(stackDiv, "display", displayVal);
+          listItem.appendChild(stackDiv);
         }
         
       }

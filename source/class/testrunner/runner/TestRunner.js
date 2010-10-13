@@ -96,6 +96,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
 
   members :
   {
+    __iframe : null,
     __loadTimer : null,
     __loadAttempts : null,  
   
@@ -118,15 +119,16 @@ qx.Class.define("testrunner.runner.TestRunner", {
     _loadIframeTests : function()
     {
       this.setTestSuiteState("loading");
-      this._iframe = this.view.getIframe();
-      qx.event.Registration.addListener(this._iframe, "load", this._onLoadIframe, this);
+      this.__iframe = this.view.getIframe();
+      qx.event.Registration.addListener(this.__iframe, "load", this._onLoadIframe, this);
       var autVersion = "";
       if (document.location.href.indexOf("/source/") >= 0 ||
           document.location.href.indexOf("index-source.html") >= 0) {
         autVersion = "-source";
       }
-      var src = "../test/html/tests" + autVersion + ".html?testclass=" + qx.core.Setting.get("qx.testNameSpace")
-      qx.bom.Iframe.setSource(this._iframe, src);
+      var src = "../test/html/tests" + autVersion + ".html";
+      src += "?testclass=" + qx.core.Setting.get("qx.testNameSpace");
+      qx.bom.Iframe.setSource(this.__iframe, src);
     },
     
     
@@ -193,7 +195,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
      */
     __initTestResult : function()
     {
-      var frameWindow = qx.bom.Iframe.getWindow(this._iframe);
+      var frameWindow = qx.bom.Iframe.getWindow(this.__iframe);
       if (frameWindow) {
         var testResult = new frameWindow.testrunner.unit.TestResult();
       } else {
@@ -257,7 +259,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
       }
       this.__loadAttempts++;
 
-      this.frameWindow = qx.bom.Iframe.getWindow(this._iframe);
+      this.frameWindow = qx.bom.Iframe.getWindow(this.__iframe);
 
       if (this.__loadTimer)
       {

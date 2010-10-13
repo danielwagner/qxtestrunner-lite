@@ -43,7 +43,7 @@ qx.Class.define("testrunner.view.Html", {
     var elemControls = document.createElement("div");
     elemControls.id = "qxtestrunner_controls";
     elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input>';
-    elemControls.innerHTML += '<input type="submit" id="qxtestrunner_stop" value="Stop Tests"></input><br/>';
+    elemControls.innerHTML += '<input type="submit" id="qxtestrunner_stop" value="Stop Tests"></input>';
     
     var stackToggle = qx.bom.Input.create("checkbox", {id: "qxtestrunner_togglestack", checked: "checked"});
     elemControls.appendChild(stackToggle);
@@ -56,6 +56,11 @@ qx.Class.define("testrunner.view.Html", {
       this.__elemIframe = qx.bom.Iframe.create({id : "qxtestrunner_autframe"});
       root.appendChild(this.__elemIframe);
     }
+    
+    var elemTestList = document.createElement("div");
+    elemTestList.id = "qxtestrunner_tests";
+    elemTestList.innerHTML = '<ul id="qxtestrunner_testlist"></ul>';
+    root.appendChild(elemTestList);
     
     var elemResults = document.createElement("div");
     elemResults.id = "qxtestrunner_results";
@@ -84,6 +89,7 @@ qx.Class.define("testrunner.view.Html", {
     }, this);
     
     this.__elemStatus = document.getElementById("qxtestrunner_status");
+    this.__elemTestList = document.getElementById("qxtestrunner_testlist");
     this.__elemResultsList = document.getElementById("qxtestrunner_resultslist");
   },
   
@@ -101,6 +107,14 @@ qx.Class.define("testrunner.view.Html", {
       check : "Boolean",
       init : true,
       apply : "_applyShowStack"
+    },
+    
+    /** List of tests selected by the user */
+    selectedTests :
+    {
+      check : "Array",
+      init : [],
+      event : "changeSelectedTests"
     }
   },
   
@@ -287,6 +301,55 @@ qx.Class.define("testrunner.view.Html", {
       for (var i=0,l=traceElems.length; i<l; i++) {
         qx.bom.element.Style.set(traceElems[i], "display", display);
       }
+    },
+    
+    
+    /**
+     * Creates a list item with a checkbox and label for each test in the 
+     * current suite. Only tests with ticked checkboxes will be run.
+     * 
+     * @param value {Array} Full list of tests
+     * @param old {Array} Previous value
+     */
+    _applyInitialTestList : function(value, old)
+    {
+      this.setSelectedTests(value);
+      
+      for (var i=0,l=value.length; i<l; i++) {
+        var listItem = document.createElement("li");
+        var testName = value[i];
+        var checkBoxId = "cb_" + this.__testNameToId(testName);
+        var cb = qx.bom.Input.create("checkbox", {id: checkBoxId, name: testName, checked: "checked"});
+        listItem.appendChild(cb);
+        listItem.innerHTML += '<label for="' + checkBoxId + '">' + testName + '</label>';
+        this.__elemTestList.appendChild(listItem);
+                
+        cb = document.getElementById(checkBoxId);
+        qx.event.Registration.addListener(cb, "change", this.__toggleTestSelected, this);
+      }
+    },
+    
+    
+    /**
+     * Adds or removes a test from the list of selected tests.
+     * 
+     * @param ev {qx.event.type.Event} The change event from the checkbox 
+     * associated with the test
+     */
+    __toggleTestSelected : function(ev)
+    {
+      var testName = ev.getTarget().name;      
+      var selectedTests = qx.lang.Array.clone(this.getSelectedTests());
+      
+      if (ev.getTarget().checked && !qx.lang.Array.contains(selectedTests, testName)) {
+        selectedTests.push(testName);
+      }
+      else if (!ev.getTarget().checked && qx.lang.Array.contains(selectedTests, testName)) {
+        qx.lang.Array.remove(selectedTests, testName);
+      }
+      
+      selectedTests.sort();
+      this.setSelectedTests(selectedTests);
     }
   }
   

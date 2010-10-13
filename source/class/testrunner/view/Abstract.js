@@ -57,7 +57,7 @@ qx.Class.define("testrunner.view.Abstract", {
       apply : "_applyStatus"
     },
     
-    /** The test suite's current state, bound to 
+    /** The test suite's current state, synchronized with 
       {@link testrunner.runner.TestRunner#testSuiteState} */
     testSuiteState :
     {
@@ -70,6 +70,12 @@ qx.Class.define("testrunner.view.Abstract", {
     testCount :
     {
       apply : "_applyTestCount"
+    },
+    
+    /** List of tests in the current suite */
+    initialTestList :
+    {
+      apply : "_applyInitialTestList"
     }
   },
   
@@ -102,6 +108,55 @@ qx.Class.define("testrunner.view.Abstract", {
     _onTestChangeState : function(testResultData)
     {
       this.error("Missing implementation of __onTestChangeState!");
+    },
+    
+    
+    /**
+     * Displays a status message.
+     * 
+     * @param value {String} The message to be displayed
+     * @param old {String} Previous value
+     */
+    _applyStatus : function(value, old)
+    {
+      this.info(value);
+    },
+    
+    
+    /**
+     * Visualizes the current state of the test suite.
+     * 
+     * @param value {String} The test suite's state, one of "init", "loading", 
+     * "ready", "running", "finished", "aborted", "error"
+     * @param old {String} Previous value
+     */
+    _applyTestSuiteState : function(value, old)
+    {
+      this.info("Test suite state: " + value);
+    },
+    
+    
+    /**
+     * Visualizes the amount of tests remaining.
+     * 
+     * @param value {Integer} Number of pending tests
+     * @param old {Integer} Previous value
+     */
+    _applyTestCount : function(value, old)
+    {
+      this.info(value + " tests pending.")
+    },
+    
+    
+    /**
+     * Visualizes the list of loaded tests.
+     * 
+     * @param value {Array} Test list
+     * @param old {Array} Previous value
+     */
+    _applyInitialTestList : function(value, old)
+    {
+      this.info(value.join(" "));
     }
   }
   

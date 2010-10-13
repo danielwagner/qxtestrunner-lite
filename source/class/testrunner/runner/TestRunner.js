@@ -52,6 +52,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
     }, this);
     this.bind("testSuiteState", this.view, "testSuiteState");
     this.bind("testCount", this.view, "testCount");
+    this.bind("initialTestList", this.view, "initialTestList");
+    qx.data.SingleValueBinding.bind(this.view, "selectedTests", this, "selectedTests");
     
     // Load unit tests
     if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {
@@ -84,6 +86,21 @@ qx.Class.define("testrunner.runner.TestRunner", {
       init : 0,
       check : "Integer",
       event : "changeTestCount"
+    },
+    
+    /** Flat list of all tests in the current suite */
+    initialTestList :
+    {
+      init : [],
+      check : "Array",
+      event : "changeInitialTestList"
+    },
+    
+    /** List of tests selected by the user */
+    selectedTests :
+    {
+      init : null,
+      apply : "_applySelectedTests"
     }
   },
 
@@ -152,12 +169,13 @@ qx.Class.define("testrunner.runner.TestRunner", {
         for (var j=0,m=testRep[i].tests.length; j<m; j++) {
           this.testList.push(testClassName + ":" + testRep[i].tests[j]);
         }
-        testCount +=  testRep[i].tests.length;
+        testCount += testRep[i].tests.length;
       }
       
       this.testList.sort();
       this.setTestSuiteState("ready");
       this.setTestCount(testCount);
+      this.setInitialTestList(this.testList);
     },
     
     
@@ -293,6 +311,19 @@ qx.Class.define("testrunner.runner.TestRunner", {
       }
       
       this.__getTestData();
+    },
+    
+    
+    /**
+     * Sets the list of pending tests to those selected by the user.
+     * 
+     * @param value {String[]} Selected tests
+     * @param old {String[]} Previous value
+     */
+    _applySelectedTests : function(value, old)
+    {
+      this.testList = value;
+      this.setTestCount(value.length);
     }
     
   }

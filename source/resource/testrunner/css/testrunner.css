@@ -17,6 +17,27 @@ h1 {
   border-bottom: 1px solid #225DA4;
 }
 
+#qxtestrunner_tests {
+  margin-top: 10px;
+}
+
+#qxtestrunner_tests ul {
+  border-top: 1px solid #E5E5E5;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#qxtestrunner_tests ul li {
+  font-size: 0.8em;
+  border-bottom: 1px solid #E5E5E5;
+  background-color: #F4F4F4;
+}
+
+#qxtestrunner_results {
+  margin-top: 10px;
+}
+
 #qxtestrunner_results ul {
   margin: 0;
   padding: 0;

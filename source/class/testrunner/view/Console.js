@@ -136,9 +136,26 @@ qx.Class.define("testrunner.view.Console", {
     {
       var testName = testResultData.getName();
       var state = testResultData.getState();
-      var exception =  testResultData.getException();
+      var exception = testResultData.getException();
       
-      this.info(testName + " : " + state);
+      var level;
+      switch(state) {
+        case "skip":
+          level = "warn";
+          break;
+        case "error":
+        case "failure":
+          level = "error";
+          break;
+        default:
+          level = "info";
+      }
+      
+      this[level](testName + " : " + state);
+      
+      if (state == "error") {
+        this.error(exception);
+      }
     }
   }
 });

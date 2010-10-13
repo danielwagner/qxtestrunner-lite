@@ -17,6 +17,13 @@ h1 {
   border-bottom: 1px solid #225DA4;
 }
 
+#qxtestrunner_autframe {
+  margin: 10px 10px 0 10px;
+  width: 98%;
+  height: 150px;
+  border: 1px inset black;
+}
+
 #qxtestrunner_tests {
   margin-top: 10px;
 }

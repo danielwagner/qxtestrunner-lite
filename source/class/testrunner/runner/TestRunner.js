@@ -209,7 +209,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
       }, this);
       
       testResult.addListener("wait", function(e) {
-        var test = e.getData();
+        //var test = e.getData();
         this.currentTestData.setState("wait");
       }, this);
       
@@ -217,25 +217,25 @@ qx.Class.define("testrunner.runner.TestRunner", {
         var ex = e.getData().exception;
         this.currentTestData.setException(ex);
         this.currentTestData.setState("failure");
-        var test = e.getData().test;
+        //var test = e.getData().test;
       }, this);
       
       testResult.addListener("error", function(e) {
-        var test = e.getData();
+        //var test = e.getData();
         var ex = e.getData().exception;
         this.currentTestData.setException(ex);
         this.currentTestData.setState("error");
       }, this);
       
       testResult.addListener("skip", function(e) {
-        var test = e.getData();
+        //var test = e.getData();
         var ex = e.getData().exception;
         this.currentTestData.setException(ex);
         this.currentTestData.setState("skip");
       }, this);
       
       testResult.addListener("endTest", function(e) {
-        var test = e.getData();
+        //var test = e.getData();
         var state = this.currentTestData.getState();
         if (state == "start") {
           this.currentTestData.setState("success");

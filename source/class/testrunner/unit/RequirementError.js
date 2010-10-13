@@ -54,6 +54,7 @@ qx.Class.define("testrunner.unit.RequirementError", {
   */
   members : 
   {
+    __message : null,
     __requirement : null,
     
     

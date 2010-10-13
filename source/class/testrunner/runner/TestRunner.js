@@ -120,7 +120,12 @@ qx.Class.define("testrunner.runner.TestRunner", {
       this.setTestSuiteState("loading");
       this._iframe = this.view.getIframe();
       qx.event.Registration.addListener(this._iframe, "load", this._onLoadIframe, this);
-      var src = "../test/html/tests.html?testclass=" + qx.core.Setting.get("qx.testNameSpace")
+      var autVersion = "";
+      if (document.location.href.indexOf("/source/") >= 0 ||
+          document.location.href.indexOf("index-source.html") >= 0) {
+        autVersion = "-source";
+      }
+      var src = "../test/html/tests" + autVersion + ".html?testclass=" + qx.core.Setting.get("qx.testNameSpace")
       qx.bom.Iframe.setSource(this._iframe, src);
     },
     
@@ -188,15 +193,12 @@ qx.Class.define("testrunner.runner.TestRunner", {
      */
     __initTestResult : function()
     {
-      /* TODO: Check if this is really necessary
-      if (this.frameWindow) {
-        var testResult = new this.frameWindow.testrunner.unit.TestResult();
+      var frameWindow = qx.bom.Iframe.getWindow(this._iframe);
+      if (frameWindow) {
+        var testResult = new frameWindow.testrunner.unit.TestResult();
       } else {
         var testResult = new testrunner.unit.TestResult();
       }
-      */
-      
-      var testResult = new testrunner.unit.TestResult();
       
       testResult.addListener("startTest", function(e) {
         var test = e.getData();

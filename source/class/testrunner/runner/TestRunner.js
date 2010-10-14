@@ -213,8 +213,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
      */
     __initTestResult : function()
     {
-      var frameWindow = qx.bom.Iframe.getWindow(this.__iframe);
-      if (frameWindow) {
+      if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {
+        var frameWindow = qx.bom.Iframe.getWindow(this.__iframe);
         var testResult = new frameWindow.testrunner.unit.TestResult();
       } else {
         var testResult = new testrunner.unit.TestResult();

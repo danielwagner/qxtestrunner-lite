@@ -128,8 +128,11 @@ qx.Class.define("testrunner.view.Html", {
   {
     __elemStatus : null,
     __elemResultsList : null,
+    __elemTestList : null,
     __elemIframe : null,
     __rootElement : null,
+    __runButton : null,
+    __stopButton : null,
     
     /**
      * Displays a status message.

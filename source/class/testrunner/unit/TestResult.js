@@ -53,6 +53,8 @@ qx.Class.define("testrunner.unit.TestResult", {
   */
   members :
   {
+    __timeout : null,
+    
     run : function(test, testFunction, self, resume)
     {
       if(!this.__timeout) {
@@ -62,7 +64,7 @@ qx.Class.define("testrunner.unit.TestResult", {
       if (resume && !this.__timeout[test.getFullName()]) {
         this.__timeout[test.getFullName()] = "failed";
         var qxEx = new qx.type.BaseError("Error in asynchronous test", "resume() called before wait()");
-        this.__createError("failure", qxEx, test);
+        this._createError("failure", qxEx, test);
         return;
       }
       
@@ -80,9 +82,9 @@ qx.Class.define("testrunner.unit.TestResult", {
         }
       } catch(ex) {
         if (ex.classname == "testrunner.unit.RequirementError") {
-          this.__createError("skip", ex, test);
+          this._createError("skip", ex, test);
         } else {
-          this.__createError("failure", ex, test);
+          this._createError("failure", ex, test);
         }
         return;
       }
@@ -109,7 +111,7 @@ qx.Class.define("testrunner.unit.TestResult", {
                previously, so we'll ignore them. */ 
           }
           var qxEx = new qx.type.BaseError("Error setting up test: " + ex.name, ex.message);
-          this.__createError("error", qxEx, test);
+          this._createError("error", qxEx, test);
           return;
         }
       }
@@ -148,12 +150,12 @@ qx.Class.define("testrunner.unit.TestResult", {
           try {
             this.callTearDown(test);
           } catch(except) {}
-          this.__createError("failure", ex, test);
+          this._createError("failure", ex, test);
         } else {
           try {
             this.callTearDown(test);
           } catch(except) {}
-          this.__createError("error", ex, test);
+          this._createError("error", ex, test);
         }
       }
       
@@ -163,7 +165,7 @@ qx.Class.define("testrunner.unit.TestResult", {
         try {
           this.callTearDown(test);
         } catch(except) {}
-        this.__createError("failure", savedExceptions[0], test);
+        this._createError("failure", savedExceptions[0], test);
       }
 
       if (!error)
@@ -173,7 +175,7 @@ qx.Class.define("testrunner.unit.TestResult", {
           this.fireDataEvent("endTest", test);
         } catch(ex) {
           var qxEx = new qx.type.BaseError("Error tearing down test: " + ex.name, ex.message);
-          this.__createError("error", qxEx, test);
+          this._createError("error", qxEx, test);
         }
       }
     },

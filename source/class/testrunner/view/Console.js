@@ -36,6 +36,7 @@ qx.Class.define("testrunner.view.Console", {
   {
     qx.log.appender.Native;
     qx.log.appender.Console;
+    this.__testResults = {};
   },
   
   /*
@@ -45,6 +46,7 @@ qx.Class.define("testrunner.view.Console", {
   */
   members :
   {
+    __testResults : null,
     
     /**
      * Tells the TestRunner to run all configured tests.
@@ -138,6 +140,15 @@ qx.Class.define("testrunner.view.Console", {
       var state = testResultData.getState();
       var exception = testResultData.getException();
       
+      //Update test results map
+      if (!this.__testResults[testName]) {
+        this.__testResults[testName] = {};        
+      }
+      this.__testResults[testName].state = state;
+      if (exception) {
+        this.__testResults[testName].exception = exception;
+      }
+      
       var level;
       switch(state) {
         case "skip":
@@ -156,6 +167,11 @@ qx.Class.define("testrunner.view.Console", {
       if (state == "error") {
         this.error(exception);
       }
+    },
+    
+    getTestResults : function()
+    {
+      return this.__testResults;
     }
   }
 });

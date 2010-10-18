@@ -64,11 +64,11 @@
           {
             "include" : [ "${APPLICATION}.Application",  "${TEST_NAMESPACE}.DemoTest"]
           },
-          "testrunner.test.ui" :
+          "${TEST_NAMESPACE}.ui" :
           {
             "include" : [ "${TEST_NAMESPACE}.ui.*" ]
           },
-          "testrunner.test.data" :
+          "${TEST_NAMESPACE}.data" :
           {
             "include" : [ "${TEST_NAMESPACE}.data.*" ]
           }

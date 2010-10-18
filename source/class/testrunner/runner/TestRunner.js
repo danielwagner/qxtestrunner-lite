@@ -53,7 +53,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
     this.bind("testSuiteState", this.view, "testSuiteState");
     this.bind("testCount", this.view, "testCount");
     this.bind("initialTestList", this.view, "initialTestList");
-    qx.data.SingleValueBinding.bind(this.view, "selectedTests", this, "selectedTests");
+    
+    if (qx.core.Variant.isSet("testrunner.view", "html")) {
+      qx.data.SingleValueBinding.bind(this.view, "selectedTests", this, "selectedTests");
+    }
     
     // Load unit tests
     if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {

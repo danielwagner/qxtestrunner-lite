@@ -66,8 +66,9 @@ qx.Class.define("testrunner.runner.TestRunner", {
     }
     
     // Check if any test parts are defined
+    this.__testParts = [];
     if (qx.core.Setting.get("qx.testParts")) {
-      this.__testParts = qx.core.Setting.get("qx.testParts");
+      this.__testParts = this.__testParts.concat(qx.core.Setting.get("qx.testParts"));
     }
   },
 
@@ -331,6 +332,11 @@ qx.Class.define("testrunner.runner.TestRunner", {
       else {
         this.setTestSuiteState("error");
         return;
+      }
+      
+      // Check if any test parts are defined
+      if (this.frameWindow.qx.core.Setting.get("qx.testParts")) {
+        this.__testParts = this.__testParts.concat(this.frameWindow.qx.core.Setting.get("qx.testParts"));
       }
       
       this.__getTestData();

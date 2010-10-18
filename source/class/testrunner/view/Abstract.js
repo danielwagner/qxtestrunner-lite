@@ -158,7 +158,7 @@ qx.Class.define("testrunner.view.Abstract", {
      */
     _applyInitialTestList : function(value, old)
     {
-      this.info(value.join(" "));
+      
     }
   }
   

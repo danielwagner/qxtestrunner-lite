@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Molengo', arial, serif;
+  font-family: Verdana, Arial, "sans-serif";
 }
 
 div {
@@ -26,6 +26,7 @@ h1 {
 
 #qxtestrunner_tests {
   margin-top: 10px;
+  font-size: 0.9em;
 }
 
 #qxtestrunner_tests ul {
@@ -43,6 +44,7 @@ h1 {
 
 #qxtestrunner_results {
   margin-top: 10px;
+  font-size: 0.9em;
 }
 
 #qxtestrunner_results ul {

@@ -17,6 +17,12 @@
 
 ************************************************************************ */
 
+/* ************************************************************************
+
+#asset(testrunner/view/html/*)
+
+************************************************************************ */
+
 /**
  * Plain HTML TestRunner view.
  */
@@ -40,6 +46,9 @@ qx.Class.define("testrunner.view.Html", {
   construct : function(rootElement, autIframe)
   {
     var root = this.__rootElement = rootElement || document.body;
+    var styleSrc = qx.util.ResourceManager.getInstance().toUri("testrunner/view/html/css/testrunner.css");
+    qx.bom.Stylesheet.includeFile(styleSrc);
+    root.innerHTML += "<h1>qooxdoo Test Runner</h1>";
     var elemControls = document.createElement("div");
     elemControls.id = "qxtestrunner_controls";
     elemControls.innerHTML = '<input type="submit" id="qxtestrunner_run" value="Run Tests"></input>';

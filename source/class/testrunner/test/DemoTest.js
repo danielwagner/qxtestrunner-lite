@@ -44,7 +44,7 @@ qx.Class.define("testrunner.test.DemoTest",
     ---------------------------------------------------------------------------
     */
   
-    
+    /*
     setUp : function()
     {
       
@@ -54,6 +54,7 @@ qx.Class.define("testrunner.test.DemoTest",
     tearDown : function() {
       this.info("common tearDown");
     },
+    */
 
     testSuccess : function()
     {
@@ -111,9 +112,10 @@ qx.Class.define("testrunner.test.DemoTest",
     
     "@tearDown testAsyncBom" : function()
     {
+      this.info("test specific teardown for testAsyncBom");
+      qx.event.Registration.removeAllListeners(this._el);
       document.body.removeChild(this._el);
       delete this._el;
-      this.info("test specific teardown for testAsyncBom");
     }
     
   }

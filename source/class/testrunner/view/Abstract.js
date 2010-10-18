@@ -69,6 +69,8 @@ qx.Class.define("testrunner.view.Abstract", {
     /** Number of configured tests that haven't run yet. */
     testCount :
     {
+      init : null,
+      nullable : true,
       apply : "_applyTestCount"
     },
     

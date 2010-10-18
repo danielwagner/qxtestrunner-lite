@@ -61,6 +61,11 @@ qx.Class.define("testrunner.runner.TestRunner", {
     } else {
       this._loadInlineTests();
     }
+    
+    // Check if any test parts are defined
+    if (qx.core.Setting.get("qx.testParts")) {
+      this.__testParts = qx.core.Setting.get("qx.testParts");
+    }
   },
 
 
@@ -83,7 +88,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
     /** Number of tests that haven't run yet */
     testCount :
     {
-      init : 0,
+      init : null,
+      nullable : true,
       check : "Integer",
       event : "changeTestCount"
     },
@@ -115,17 +121,19 @@ qx.Class.define("testrunner.runner.TestRunner", {
   {
     __iframe : null,
     __loadTimer : null,
-    __loadAttempts : null,  
+    __loadAttempts : null,
+    __testParts : null,
   
     
     /**
      * Loads test classes that are a part of the TestRunner application.
      */
-    _loadInlineTests : function()
+    _loadInlineTests : function(nameSpace)
     {
+      nameSpace = nameSpace || qx.core.Setting.get("qx.testNameSpace");
       this.setTestSuiteState("loading");
       this.loader = new qx.dev.unit.TestLoaderInline();
-      this.loader.setTestNamespace(qx.core.Setting.get("qx.testNameSpace"));
+      this.loader.setTestNamespace(nameSpace);
       this.__getTestData();
     },
     
@@ -143,8 +151,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
           document.location.href.indexOf("index-source.html") >= 0) {
         autVersion = "-source";
       }
-      var src = "../test/html/tests" + autVersion + ".html";
-      src += "?testclass=" + qx.core.Setting.get("qx.testNameSpace");
+      //var src = "../test/html/tests" + autVersion + ".html";
+      //src += "?testclass=" + qx.core.Setting.get("qx.testNameSpace");
+      var src = "/~dwagner/workspace/mltest2/test/html/tests" + autVersion + ".html";
+      src += "?testclass=mltest2.test";
       qx.bom.Iframe.setSource(this.__iframe, src);
     },
     
@@ -171,7 +181,6 @@ qx.Class.define("testrunner.runner.TestRunner", {
         }
         testCount += testRep[i].tests.length;
       }
-      
       this.testList.sort();
       this.setTestSuiteState("ready");
       this.setTestCount(testCount);
@@ -193,9 +202,20 @@ qx.Class.define("testrunner.runner.TestRunner", {
         return;
       }
       if (this.testList.length == 0) {
-        this.setTestSuiteState("finished");
-        return;
-      };
+        if (this.__testParts && this.__testParts.length > 0) {
+          var nextPart = this.__testParts.shift();
+          qx.io.PartLoader.require([nextPart], function()
+          {
+            this._loadInlineTests(nextPart);
+            this.runTests();
+          }, this);
+          return;
+        }
+        else {
+          this.setTestSuiteState("finished");
+          return;
+        }
+      }
       
       var currentTestFull = this.testList.shift();
       this.setTestCount(this.testList.length);
@@ -323,6 +343,11 @@ qx.Class.define("testrunner.runner.TestRunner", {
     _applySelectedTests : function(value, old)
     {
       this.testList = value;
+      // Make sure the value is applied even if it didn't change so the view is
+      // updated
+      if (value.length == this.getTestCount()) {
+        this.resetTestCount();
+      }
       this.setTestCount(value.length);
     }
     

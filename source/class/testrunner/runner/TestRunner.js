@@ -150,15 +150,8 @@ qx.Class.define("testrunner.runner.TestRunner", {
       this.setTestSuiteState("loading");
       this.__iframe = this.view.getIframe();
       qx.event.Registration.addListener(this.__iframe, "load", this._onLoadIframe, this);
-      var autVersion = "";
-      if (document.location.href.indexOf("/source/") >= 0 ||
-          document.location.href.indexOf("index-source.html") >= 0) {
-        autVersion = "-source";
-      }
-      //var src = "../test/html/tests" + autVersion + ".html";
-      //src += "?testclass=" + qx.core.Setting.get("qx.testNameSpace");
-      var src = "/~dwagner/workspace/mltest2/test/html/tests" + autVersion + ".html";
-      src += "?testclass=mltest2.test";
+      var src = qx.core.Setting.get("qx.testPageUri");
+      src += "?testclass=" + qx.core.Setting.get("qx.testNameSpace");
       qx.bom.Iframe.setSource(this.__iframe, src);
     },
     

@@ -45,17 +45,24 @@
         "qx.application" : "${APPLICATION}.Application",
         "qx.testNameSpace" : "${TEST_NAMESPACE}"
         //"qx.disposerDebugLevel" : "2"
-      },
-      
-      "variants" :
-      {
-        "testrunner.view" : ["console", "html"],
-        "testrunner.testOrigin" : ["iframe", "inline"]
       }
     },
     
     "source-script" :
+    {    
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${ROOT}/source/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
+        }
+      }
+    },
+    
+    "source-script-packages" :
     {
+      "extend" : ["source-script"],
+      
       "packages" :
       {
         "parts"  :
@@ -78,14 +85,6 @@
       "settings" :
       {
         "qx.testParts" : ["${TEST_NAMESPACE}.ui", "${TEST_NAMESPACE}.data"]
-      },
-    
-      "compile-options" :
-      {
-        "paths" :
-        {
-          "file" : "${ROOT}/source/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
-        }
       }
     },
     
@@ -97,6 +96,47 @@
         {
           "file" : "${BUILD_PATH}/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
         }
+      }
+    },
+    
+    "test-iframe" :
+    {
+      "extend" : ["source"],
+      
+      "variants" :
+      {
+        "testrunner.view" : ["html"],
+        "testrunner.testOrigin" : ["iframe"]
+      },
+      
+      "settings" :
+      {
+        //"qx.testPageUri"   : "../test/html/tests.html",
+        //For testing purposes only:
+        "qx.testPageUri"   : "../../qooxdoo.trunk/framework/test/html/tests.html",
+        "qx.testNameSpace" : "qx.test"
+      }
+    },
+    
+    "test-inline" :
+    {
+      "run" : ["source-script-packages"],
+      
+      "variants" :
+      {
+        "testrunner.view" : ["html"],
+        "testrunner.testOrigin" : ["inline"]
+      }
+    },
+    
+    "test-console" :
+    {
+      "extend" : ["source"],
+      
+      "variants" :
+      {
+        "testrunner.view" : ["console"],
+        "testrunner.testOrigin" : ["inline"]
       }
     }
     

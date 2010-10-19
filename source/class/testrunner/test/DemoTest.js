@@ -112,7 +112,8 @@ qx.Class.define("testrunner.test.DemoTest",
       this.wait();
     },
     
-    "@tearDown testAsyncBom" : function()
+    tearDownTestAsyncBom : function()
+    //"@tearDown testAsyncBom" : function()
     {
       this.info("test specific teardown for testAsyncBom");
       qx.event.Registration.removeAllListeners(this._el);

@@ -194,6 +194,9 @@ qx.Class.define("testrunner.unit.TestResult", {
       test.tearDown();
       var testClass = test.getTestClass();
       var specificTearDown = "@tearDown " + test.getName();
+      if (!testClass[specificTearDown]) { 
+        specificTearDown = "tearDown" + qx.lang.String.firstUp(test.getName());
+      }
       if (testClass[specificTearDown]) {
         testClass[specificTearDown]();
       }

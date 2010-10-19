@@ -232,7 +232,13 @@ qx.Class.define("testrunner.runner.TestRunner", {
     {
       if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {
         var frameWindow = qx.bom.Iframe.getWindow(this.__iframe);
-        var testResult = new frameWindow.testrunner.unit.TestResult();
+        try {
+          var testResult = new frameWindow.testrunner.unit.TestResult();
+        } catch(ex) {
+          // TODO: Remove after testrunner.unit.TestResult has replaced
+          // qx.dev.unit.TestResult
+          var testResult = new frameWindow.qx.dev.unit.TestResult();
+        }
       } else {
         var testResult = new testrunner.unit.TestResult();
       }

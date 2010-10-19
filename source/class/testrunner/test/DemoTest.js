@@ -83,9 +83,11 @@ qx.Class.define("testrunner.test.DemoTest",
     
     
     //"@require testSsl" : [ ["Opera", ">=", 9] ],
-    "@require testSsl" : ["ssl"],
-    testSsl : function() {
-       this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
+    //"@require testSsl" : ["ssl"],
+    testSsl : function() 
+    {
+      this.require(["ssl"]);
+      this.assert(qx.bom.client.Feature.SSL, "This test should have been skipped!");
     },
     
     testAsyncBom : function()

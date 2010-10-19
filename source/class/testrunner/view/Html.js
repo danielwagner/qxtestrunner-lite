@@ -237,9 +237,13 @@ qx.Class.define("testrunner.view.Html", {
       if (listItem) {
         qx.bom.element.Attribute.set(listItem, "class", state);
       } else {
-        var itemHtml = '<li id="' + id + '" class="' + state + '">' + testName;
-        itemHtml += '</li>';
-        this.__elemResultsList.innerHTML += itemHtml;
+        var item = qx.bom.Element.create("li", {id : id, "class" : state});
+        if (this.__elemResultsList.firstChild) {
+          qx.dom.Element.insertBefore(item, this.__elemResultsList.firstChild);
+        } else {
+          this.__elemResultsList.appendChild(item);
+        }
+        item.innerHTML = testName;
         listItem = document.getElementById(id);
       }
       

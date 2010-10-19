@@ -78,6 +78,14 @@ qx.Class.define("testrunner.view.Abstract", {
     initialTestList :
     {
       apply : "_applyInitialTestList"
+    },
+    
+    /** List of tests selected by the user */
+    selectedTests :
+    {
+      check : "Array",
+      init : [],
+      event : "changeSelectedTests"
     }
   },
   

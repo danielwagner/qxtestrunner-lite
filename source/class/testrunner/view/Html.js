@@ -116,14 +116,6 @@ qx.Class.define("testrunner.view.Html", {
       check : "Boolean",
       init : true,
       apply : "_applyShowStack"
-    },
-    
-    /** List of tests selected by the user */
-    selectedTests :
-    {
-      check : "Array",
-      init : [],
-      event : "changeSelectedTests"
     }
   },
   

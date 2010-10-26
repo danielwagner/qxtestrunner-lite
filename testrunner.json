@@ -1,5 +1,5 @@
 {
-  "name" : "Testrunner (export) config",
+  "name" : "Testrunner-lowlevel (export) config",
 
   "let" :
   {
@@ -8,79 +8,26 @@
     "TESTRUNNER"   : "testrunner",
     "TEST_INCLUDE" : "${APPLICATION}.test.*",
     "TESTS_SCRIPT" : "tests.js",         // output script name
-    "BUILD_PATH"   : "build",
-    "THEME"        : "qx.theme.Modern"
+    "BUILD_PATH"   : "build"
   },
 
   "jobs" :
   {
-  
-    "testrunner-hybrid-common" :
-    {
-      "extend" : ["libraries"],
-    
-      "library" :
-      [
-        {
-          "manifest" : "${TESTRUNNER_ROOT}/Manifest.json"
-        }
-      ],
-
-      "include" :
-      [
-        "testrunner.Application",
-        "${TEST_INCLUDE}"
-      ],
-      
-      "exclude" :
-      [
-        "qx.theme.*"
-      ],
-
-      "settings" :
-      {
-        "qx.application"   : "testrunner.Application",
-        "qx.globalErrorHandling" : "on",
-        "qx.version"       : "${QOOXDOO_VERSION}",
-        "qx.testNameSpace" : "${APPLICATION}.test",  // this is common, but not mandatory
-        "testrunner.title" : "${APPLICATION}"
-      },
-
-      "cache" :
-      {
-        "compile" : "${CACHE}"
-      }
-    },
-  
-    "build-hybrid" : 
+    "build" :
     {
       "run" :
       [
-        "build-hybrid-resources",
-        "build-hybrid-files",
-        "build-hybrid-script"
+        "build-resources",
+        "build-files",
+        "build-script",
+        "build-tests-script"
+        //TODO: build-tests-resources, build-tests-files
       ]
     },
     
-    "build-hybrid-files" :
+    "build-resources":
     {
-      "extend" : ["testrunner-hybrid-common"],
-
-      "copy-files" :
-      {
-        "files" :
-        [
-          "index.html"
-        ],
-
-        "target" : "${BUILD_PATH}",
-        "source" : "${TESTRUNNER_ROOT}/source"
-      }
-    },
-
-    "build-hybrid-resources":
-    {
-      "extend" : ["testrunner-hybrid-common"],
+      "extend" : ["testrunner-lowlevel-common"],
 
       "include" :
       [
@@ -93,20 +40,35 @@
       }
     },
     
-    "build-hybrid-script" :
+    "build-files" :
     {
-      "extend" : ["testrunner-hybrid-common"],
-      
-      "variants" :
+      "extend" : ["testrunner-lowlevel-common"],
+
+      "copy-files" :
       {
-        "testrunner.view" : ["console", "html"]
-      },
+        "files" :
+        [
+          "index.html",
+          "index-source.html",
+          "index-console.html",
+          "index-iframe.html",
+          "html"
+        ],
+
+        "target" : "${BUILD_PATH}",
+        "source" : "${TESTRUNNER_ROOT}/source"
+      }
+    },
+    
+    "build-script" :
+    {
+      "extend" : ["testrunner-lowlevel-common"],
 
       "compile-options" :
       {
         "paths" :
         {
-          "file"   : "${BUILD_PATH}/script/${TESTRUNNER}-{testrunner.view}.js"
+          "file"   : "${BUILD_PATH}/script/${TESTRUNNER}-{testrunner.view}-{testrunner.testOrigin}.js" // this should be relative to 'target'
         },
         "code" :
         {
@@ -115,7 +77,149 @@
       },
       
       "compile" : { "type" : "build" }
-    }
+    },
+    
+    "testrunner-lowlevel-common" :
+    {
+      "library" :
+      [
+        {
+          "manifest" : "${QOOXDOO_PATH}/framework/Manifest.json"
+        },
 
+        {
+          "manifest" : "${TESTRUNNER_ROOT}/Manifest.json"
+        }
+      ],
+
+      "include" :
+      [
+        "testrunner.Application"
+      ],
+
+      "settings" :
+      {
+        "qx.application"   : "testrunner.Application",
+        "qx.version"       : "${QOOXDOO_VERSION}",
+        "qx.testNameSpace" : "${APPLICATION}.test",  // this is common, but not mandatory
+        "testrunner.title" : "${APPLICATION}"
+      },
+
+      "cache" :
+      {
+        "compile"      : "${CACHE}",
+        "downloads"    : "${CACHE}/downloads",
+        "invalidate-on-tool-change" : true
+      }
+    },
+    
+    "tests-common" :
+    {
+      "extend"    : [ "libraries" ],
+
+      "let" :
+      {
+        "LOCALES" : ["de", "de_DE", "fr", "fr_FR" ]
+      },
+
+      "library" :
+      [
+        {
+          "manifest" : "${QOOXDOO_PATH}/framework/Manifest.json"
+        },
+
+        {
+          "manifest" : "${TESTRUNNER_ROOT}/Manifest.json"
+        }
+      ],
+
+      "include" : ["testrunner.TestLoader", "${TEST_INCLUDE}", "${QXTHEME}"],
+
+      "settings" :
+      {
+        "qx.theme" : "${QXTHEME}",
+        "qx.globalErrorHandling" : "on",
+        "qx.testPageUri"   : "../test/html/tests.html",
+        "qx.testNameSpace" : "${APPLICATION}.test"
+      },
+
+      "cache" :
+      {
+        "compile" : "${CACHE}"
+      }
+    },
+    
+    "build-tests-script" :
+    {
+      "extend" : ["tests-common"],
+
+      "variants": 
+      {
+        "qx.debug" : ["on"]
+      },
+
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${BUILD_PATH}/script/${TESTS_SCRIPT}"
+        },
+        "uris" :
+        {
+           "script"  : "../script",
+          "resource" : "../resource"
+        },
+        "code" :
+        {
+          "locales" : "${LOCALES}",
+          "optimize" : [],
+          //"optimize" : ["variables", "basecalls", "privates", "strings"],
+          "format" : true
+        }
+      },
+      
+      "compile" : { "type" : "build" }
+      
+    },
+    
+    "source" :
+    {
+      "run" :
+      [
+        "source-script",
+        "source-tests-script"
+      ]
+    },
+    
+    "build-with-tests-source" :
+    {
+      "run" :
+      [
+        "build-resources",
+        "build-files",
+        "build-script",
+        "source-tests-script"
+      ]
+    },
+    
+    "source-tests-script" : 
+    {
+      "extend" : ["tests-common"],
+
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file"    : "${BUILD_PATH}/script/tests-source.js",
+          "app-root"    : "${BUILD_PATH}/html"
+        },
+        "code" :
+        {
+          "locales" : "${LOCALES}"
+        }
+      },
+      
+      "compile" : { "type" : "source" }
+    }
   }
 }

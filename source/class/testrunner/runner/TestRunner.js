@@ -33,6 +33,10 @@ qx.Class.define("testrunner.runner.TestRunner", {
   */
   construct : function()
   {
+    if (qx.core.Setting.get("qx.globalErrorHandling") === "on") {
+      qx.event.GlobalError.setErrorHandler(this._handleGlobalError, this);      
+    }
+    
     // Create view
     if (qx.core.Variant.isSet("testrunner.view", "console")) {
       this.view = new testrunner.view.Console();
@@ -357,6 +361,11 @@ qx.Class.define("testrunner.runner.TestRunner", {
         this.resetTestCount();
       }
       this.setTestCount(value.length);
+    },
+    
+    _handleGlobalError : function(ex)
+    {
+      this.error(ex);
     }
     
   }

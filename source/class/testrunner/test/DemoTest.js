@@ -105,9 +105,11 @@ qx.Class.define("testrunner.test.DemoTest",
       },this);
 
       var self = this;
-      window.setTimeout(function(){
+      
+      window.setTimeout(qx.event.GlobalError.observeMethod(function() {
         qx.bom.Element.focus(self._el);
-      }, 2000);
+        throw new Error("catch me if you can!");
+      }), 2000);
       
       this.wait();
     },

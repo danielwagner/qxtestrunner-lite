@@ -8,7 +8,8 @@
     "TESTRUNNER"   : "testrunner",
     "TEST_INCLUDE" : "${APPLICATION}.test.*",
     "TESTS_SCRIPT" : "tests.js",         // output script name
-    "BUILD_PATH"   : "build"
+    "BUILD_PATH"   : "build",
+    "THEME"        : "qx.theme.Modern"
   },
 
   "jobs" :
@@ -48,7 +49,7 @@
       {
         "files" :
         [
-          "index.html",
+          "index-inline.html",
           "index-source.html",
           "index-console.html",
           "index-iframe.html",
@@ -102,6 +103,7 @@
         "qx.application"   : "testrunner.Application",
         "qx.version"       : "${QOOXDOO_VERSION}",
         "qx.testNameSpace" : "${APPLICATION}.test",  // this is common, but not mandatory
+        "qx.testPageUri"   : "${ROOT}/html/tests-source.html",
         "testrunner.title" : "${APPLICATION}"
       },
 
@@ -138,9 +140,7 @@
       "settings" :
       {
         "qx.theme" : "${QXTHEME}",
-        "qx.globalErrorHandling" : "on",
-        "qx.testPageUri"   : "../test/html/tests.html",
-        "qx.testNameSpace" : "${APPLICATION}.test"
+        "qx.globalErrorHandling" : "on"
       },
 
       "cache" :
@@ -155,7 +155,7 @@
 
       "variants": 
       {
-        "qx.debug" : ["on"]
+        "qx.debug" : ["off"]
       },
 
       "compile-options" :
@@ -172,8 +172,7 @@
         "code" :
         {
           "locales" : "${LOCALES}",
-          "optimize" : [],
-          //"optimize" : ["variables", "basecalls", "privates", "strings"],
+          "optimize" : ["variables", "basecalls", "privates", "strings"],
           "format" : true
         }
       },

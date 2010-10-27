@@ -57,6 +57,11 @@ qx.Class.define("testrunner.view.Html", {
     var stackToggle = qx.bom.Input.create("checkbox", {id: "qxtestrunner_togglestack", checked: "checked"});
     elemControls.appendChild(stackToggle);
     elemControls.innerHTML += '<label for="qxtestrunner_togglestack">Show stack trace</label>';
+    
+    var passedToggle = qx.bom.Input.create("checkbox", {id: "qxtestrunner_togglepassed", checked: "checked"});
+    elemControls.appendChild(passedToggle);
+    elemControls.innerHTML += '<label for="qxtestrunner_togglepassed">Show successful tests</label>';
+    
     root.appendChild(elemControls);
     
     if (autIframe) {
@@ -97,6 +102,11 @@ qx.Class.define("testrunner.view.Html", {
       this.setShowStack(ev.getData());
     }, this);
     
+    passedToggle = document.getElementById("qxtestrunner_togglepassed");
+    qx.event.Registration.addListener(passedToggle, "change", function(ev) {
+      this.setShowPassed(ev.getData());
+    }, this);
+    
     this.__elemStatus = document.getElementById("qxtestrunner_status");
     this.__elemTestList = document.getElementById("qxtestrunner_testlist");
     this.__elemResultsList = document.getElementById("qxtestrunner_resultslist");
@@ -116,6 +126,16 @@ qx.Class.define("testrunner.view.Html", {
       check : "Boolean",
       init : true,
       apply : "_applyShowStack"
+    },
+    
+    /** Controls whether successfully passed tests should appear in the results 
+     * list */
+    showPassed :
+    {
+      check : "Boolean",
+      init : null,
+      nullable : true,
+      apply : "_applyShowPassed"
     }
   },
   
@@ -233,7 +253,7 @@ qx.Class.define("testrunner.view.Html", {
       var exception =  testResultData.getException();
       
       var id = this.__testNameToId(testName);
-      var listItem = document.getElementById(id); 
+      var listItem = document.getElementById(id);
       if (listItem) {
         qx.bom.element.Attribute.set(listItem, "class", state);
       } else {
@@ -245,6 +265,10 @@ qx.Class.define("testrunner.view.Html", {
         }
         item.innerHTML = testName;
         listItem = document.getElementById(id);
+      }
+      
+      if (state == "success" && this.getShowPassed() === false) {
+        qx.bom.element.Style.set(listItem, "display", "none");
       }
       
       if (exception) {
@@ -291,8 +315,7 @@ qx.Class.define("testrunner.view.Html", {
     
     
     /**
-     * Sets the "display" style attribute of all nodes with the css class 
-     * "stacktrace" according to the value of showStack. 
+     * Shows/hides all stack trace nodes in the results list.
      * 
      * @param value {Boolean} Incoming property value
      * @param value {Boolean} Previous property value
@@ -303,11 +326,37 @@ qx.Class.define("testrunner.view.Html", {
         return;
       }
       
-      var display = value ? "block" : "none";
-      
-      var traceElems = qx.bom.Selector.query(".stacktrace", this.__rootElement);
-      for (var i=0,l=traceElems.length; i<l; i++) {
-        qx.bom.element.Style.set(traceElems[i], "display", display);
+      this.__setDisplayForClass(".stacktrace", value);
+    },
+    
+    
+    /**
+     * Shows/hides all successful tests in the results list.
+     * 
+     * @param value {Boolean} Incoming property value
+     * @param value {Boolean} Previous property value
+     */
+    _applyShowPassed : function(value, old)
+    {
+      if (value === null || value === old) {
+        return;
+      }
+      this.__setDisplayForClass(".success", value);
+    },
+    
+    
+    /**
+     * Sets the CSS "display" attribute of all nodes with the given CSS class.
+     * 
+     * @param cssClass {String} CSS class name
+     * @param display {Boolean} Display value: true for "block", false for "none"
+     */
+    __setDisplayForClass : function(cssClass, display)
+    {
+      var displayVal = display ? "block" : "none";
+      var elems = qx.bom.Selector.query(cssClass, this.__rootElement);
+      for (var i=0,l=elems.length; i<l; i++) {
+        qx.bom.element.Style.set(elems[i], "display", displayVal);
       }
     },
     

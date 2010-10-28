@@ -16,6 +16,8 @@
   {
     "build" :
     {
+      "desc" : "Generates build versions of the Test Runner and the AUT",
+      
       "run" :
       [
         "build-resources",
@@ -24,6 +26,24 @@
         "build-tests-script"
         //TODO: build-tests-resources, build-tests-files
       ]
+    },
+    
+    "build-inline" :
+    {
+      "desc" : "Generates a build version of the Test Runner with integrated test classes",
+    
+      "run" :
+      [
+        "build-resources",
+        "build-files",
+        "build-inline-script"
+        //TODO: build-tests-resources, build-tests-files
+      ]
+    },
+    
+    "build-inline-script" :
+    {
+      "extend" : ["build-script", "tests-common"]
     },
     
     "build-resources":
@@ -49,10 +69,10 @@
       {
         "files" :
         [
-          "index-inline.html",
-          "index-source.html",
           "index-console.html",
+          "index-iframe-source.html",
           "index-iframe.html",
+          "index-inline.html",
           "html"
         ],
 
@@ -63,21 +83,53 @@
     
     "build-script" :
     {
+      "desc" : "Generates build version of Test Runner",
+    
       "extend" : ["testrunner-lowlevel-common"],
 
       "compile-options" :
       {
         "paths" :
         {
-          "file"   : "${BUILD_PATH}/script/${TESTRUNNER}-{testrunner.view}-{testrunner.testOrigin}.js" // this should be relative to 'target'
+          "file" : "${BUILD_PATH}/script/${TESTRUNNER}-{testrunner.view}-{testrunner.testOrigin}.js" // this should be relative to 'target'
         },
         "code" :
         {
           "optimize" : ["variables", "basecalls", "privates", "strings"]
+        },
+        "uris"   :
+        {
+          "script"   : "script",
+          "add-nocache-param" : false
         }
       },
       
       "compile" : { "type" : "build" }
+    },
+    
+    "source-script" :
+    {
+      "desc" : "Generates source version of Test Runner",
+      
+      "extend" : ["testrunner-lowlevel-common"],
+      
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${BUILD_PATH}/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}-source.js"
+        },
+        "uris" : 
+        {
+          "add-nocache-param" : true
+        },
+        "code" :
+        {
+          "locales" : "${LOCALES}"
+        }
+      },
+      
+      "compile" : { "type" : "source" }
     },
     
     "testrunner-lowlevel-common" :
@@ -103,7 +155,7 @@
         "qx.application"   : "testrunner.Application",
         "qx.version"       : "${QOOXDOO_VERSION}",
         "qx.testNameSpace" : "${APPLICATION}.test",  // this is common, but not mandatory
-        "qx.testPageUri"   : "${ROOT}/html/tests-source.html",
+        "qx.testPageUri"   : "${ROOT}/html/tests.html",
         "testrunner.title" : "${APPLICATION}"
       },
 
@@ -151,6 +203,8 @@
     
     "build-tests-script" :
     {
+      "desc" : "Generates build version of AUT",
+    
       "extend" : ["tests-common"],
 
       "variants": 
@@ -183,6 +237,8 @@
     
     "source" :
     {
+      "desc" : "Generates source versions of the Test Runner and the AUT",
+      
       "run" :
       [
         "source-script",
@@ -192,6 +248,8 @@
     
     "build-with-tests-source" :
     {
+      "desc" : "Generates a build version of the Test Runner and a source version of the AUT",
+    
       "run" :
       [
         "build-resources",
@@ -203,6 +261,8 @@
     
     "source-tests-script" : 
     {
+      "desc" : "Generates source version of AUT",
+    
       "extend" : ["tests-common"],
 
       "compile-options" :

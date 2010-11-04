@@ -21,11 +21,27 @@
       "run" :
       [
         "build-resources",
-        "build-files",
+        //"build-files",
         "build-script",
-        "build-tests-script"
-        //TODO: build-tests-resources, build-tests-files
-      ]
+        "build-tests-script",
+        "build-tests-resources",
+        "build-tests-files"
+      ],
+      
+      "copy-files" :
+      {
+        "files" :
+        [
+          //"index-console.html",
+          //"index-iframe-source.html",
+          "index-iframe.html",
+          //"index-inline.html",
+          "html"
+        ],
+
+        "target" : "${BUILD_PATH}",
+        "source" : "${TESTRUNNER_ROOT}/source"
+      }
     },
     
     "build-inline" :
@@ -35,10 +51,25 @@
       "run" :
       [
         "build-resources",
-        "build-files",
+        //"build-files",
         "build-inline-script"
         //TODO: build-tests-resources, build-tests-files
-      ]
+      ],
+      
+      "copy-files" :
+      {
+        "files" :
+        [
+          //"index-console.html",
+          //"index-iframe-source.html",
+          //"index-iframe.html",
+          "index-inline.html",
+          "html"
+        ],
+
+        "target" : "${BUILD_PATH}",
+        "source" : "${TESTRUNNER_ROOT}/source"
+      }
     },
     
     "build-inline-script" :
@@ -61,6 +92,7 @@
       }
     },
     
+    /*
     "build-files" :
     {
       "extend" : ["testrunner-lowlevel-common"],
@@ -80,6 +112,7 @@
         "source" : "${TESTRUNNER_ROOT}/source"
       }
     },
+    */
     
     "build-script" :
     {
@@ -117,7 +150,7 @@
       {
         "paths" :
         {
-          "file" : "${BUILD_PATH}/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}-source.js"
+          "file" : "${BUILD_PATH}/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
         },
         "uris" : 
         {
@@ -127,6 +160,11 @@
         {
           "locales" : "${LOCALES}"
         }
+      },
+      
+      "settings" :
+      {
+        "qx.testPageUri"   : "./html/tests-source.html"
       },
       
       "compile" : { "type" : "source" }
@@ -154,8 +192,7 @@
       {
         "qx.application"   : "testrunner.Application",
         "qx.version"       : "${QOOXDOO_VERSION}",
-        "qx.testNameSpace" : "${APPLICATION}.test",  // this is common, but not mandatory
-        "qx.testPageUri"   : "${ROOT}/html/tests.html",
+        "qx.testNameSpace" : "${APPLICATION}.test",
         "testrunner.title" : "${APPLICATION}"
       },
 
@@ -187,7 +224,7 @@
         }
       ],
 
-      "include" : ["testrunner.TestLoader", "${TEST_INCLUDE}", "${QXTHEME}"],
+      "include" : ["testrunner.TestLoader", "testrunner.unit.TestResult", "${TEST_INCLUDE}", "${QXTHEME}"],
 
       "settings" :
       {
@@ -232,7 +269,30 @@
       },
       
       "compile" : { "type" : "build" }
+    },
+    
+    "build-tests-resources" :
+    {
+      "extend" : ["tests-common"],
       
+      "copy-resources" :
+      {
+        "target" : "${BUILD_PATH}"
+      }
+    },
+    
+    
+    "build-tests-files" :
+    {
+      "extend" : ["tests-common"],
+    
+      "copy-files" :
+      {
+        "files" : [],
+
+        "source" : "${ROOT}/source",
+        "target" : "${BUILD_PATH}"
+      }
     },
     
     "source" :
@@ -253,10 +313,25 @@
       "run" :
       [
         "build-resources",
-        "build-files",
+        //"build-files",
         "build-script",
         "source-tests-script"
-      ]
+      ],
+      
+      "copy-files" :
+      {
+        "files" :
+        [
+          //"index-console.html",
+          "index-iframe-source.html",
+          //"index-iframe.html",
+          //"index-inline.html",
+          "html"
+        ],
+
+        "target" : "${BUILD_PATH}",
+        "source" : "${TESTRUNNER_ROOT}/source"
+      }
     },
     
     "source-tests-script" : 

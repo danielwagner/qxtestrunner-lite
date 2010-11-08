@@ -121,6 +121,30 @@ qx.Class.define("testrunner.test.DemoTest",
       qx.event.Registration.removeAllListeners(this._el);
       document.body.removeChild(this._el);
       delete this._el;
+    },
+    
+    testListenerA : function()
+    {
+      qx.locale.Manager.getInstance().addListener("changeLocale", function(ev) {
+        this.resume(function() {
+          console.log("Locale changed!");
+        }, this );
+      }, this);
+      window.setTimeout(function() {
+        qx.locale.Manager.getInstance().setLocale("fr");
+      }, 100 );
+      this.wait();
+    },
+    
+    testListenerB : function()
+    {
+      qx.locale.Manager.getInstance().setLocale("de");
+    },
+    
+    testPolluteDom : function()
+    {
+      var el = document.createElement("div");
+      document.body.appendChild(el);
     }
     
   }

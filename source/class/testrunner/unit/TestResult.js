@@ -57,6 +57,29 @@ qx.Class.define("testrunner.unit.TestResult", {
     
     run : function(test, testFunction, self, resume)
     {
+      /* EXPERIMENTAL
+      if (!resume) {
+        var testInst = test.getTestClass();
+        testInst.__addedListeners = [];
+        if (!qx.event.Registration.addListenerOriginal) {
+          qx.event.Registration.addListenerOriginal = qx.event.Registration.addListener;
+          qx.event.Registration.addListener = function(target, type, listener, self, capture) {
+            var listenerId =  qx.event.Registration.addListenerOriginal(target, type, listener, self, capture);
+            var store = true;
+            if ( (target.classname && target.classname.indexOf("testrunner.unit") == 0) 
+                 || (self && self.classname && self.classname.indexOf("testrunner.unit") == 0) ) {
+              store = false;              
+            }
+            if (store) {
+              //console.log("adding listener " + target.toString() + " " + type);
+              testInst.__addedListeners.push([target, listenerId]);
+            }
+            return listenerId;          
+          }
+        }
+      }
+      */
+      
       if(!this._timeout) {
         this._timeout = {};
       }
@@ -180,6 +203,27 @@ qx.Class.define("testrunner.unit.TestResult", {
           this._createError("error", qxEx, test);
         }
       }
+      
+      /* EXPERIMENTAL
+      // no timeout means the test is done
+      if (!this._timeout[test.getFullName()]) {
+        // remove listeners added during test execution
+        var testInst = test.getTestClass();
+        if (testInst.__addedListeners) {
+          var listeners = testInst.__addedListeners;
+          for (var i=0,l=listeners.length; i<l; i++) {
+            var target = listeners[i][0];
+            var id = listeners[i][1];
+            try {
+              qx.event.Registration.removeListenerById(target, id);
+              //console.log("Removed listener from object " + target);
+            } catch(ex) {
+              //console.log("couldn't remove listener from object " + target);          
+            }
+          }
+        }
+      }
+      */
     },
     
     

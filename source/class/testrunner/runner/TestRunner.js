@@ -157,6 +157,7 @@ qx.Class.define("testrunner.runner.TestRunner", {
       var src = qx.core.Setting.get("qx.testPageUri");
       src += "?testclass=" + qx.core.Setting.get("qx.testNameSpace");
       qx.bom.Iframe.setSource(this.__iframe, src);
+      this.debug("Setting AUT URI: " + src);
     },
     
     
@@ -198,10 +199,6 @@ qx.Class.define("testrunner.runner.TestRunner", {
         return;
       }
       
-      if (document.body.childNodes.length == 0) {
-        this.warn(this.currentTestData.getName() + " broke the DOM!");
-        return;
-      }
       if (this.testList.length == 0) {
         if (this.__testParts && this.__testParts.length > 0) {
           var nextPart = this.__testParts.shift();
@@ -248,6 +245,12 @@ qx.Class.define("testrunner.runner.TestRunner", {
       }
       
       testResult.addListener("startTest", function(e) {
+        /* EXPERIMENTAL
+        if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {
+          this.__bodyLength = this.frameWindow.document.body.innerHTML.length;
+        }
+        */
+        
         var test = e.getData();
         this.currentTestData = new testrunner.runner.TestResultData(test.getFullName());
         this.view.addTestResult(this.currentTestData);
@@ -285,6 +288,24 @@ qx.Class.define("testrunner.runner.TestRunner", {
         if (state == "start") {
           this.currentTestData.setState("success");
         }
+        
+        /* EXPERIMENTAL
+        if (qx.core.Variant.isSet("testrunner.testOrigin", "iframe")) {
+          if (!this.frameWindow.qx.test || !this.frameWindow.qx.test.ui ||
+              !this.frameWindow.qx.test.ui.LayoutTestCase ||
+              !e.getData().getTestClass() instanceof this.frameWindow.qx.test.ui.LayoutTestCase ) {
+            this.frameWindow.qx.ui.core.queue.Dispose.flush();
+            this.frameWindow.qx.ui.core.queue.Manager.flush();
+            if (this.__bodyLength != this.frameWindow.document.body.innerHTML.length) {
+              var error = new Error("Incomplete tearDown: The DOM was not reverted to its initial state!");
+              this.currentTestData.setException(error);
+              this.currentTestData.setState("error");
+            }  
+          
+          }
+        }
+        */
+        
         qx.event.Timer.once(this.runTests, this, 0);
       }, this);
       

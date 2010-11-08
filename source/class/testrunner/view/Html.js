@@ -136,6 +136,27 @@ qx.Class.define("testrunner.view.Html", {
       init : null,
       nullable : true,
       apply : "_applyShowPassed"
+    },
+    
+    /** Running count of failed tests */
+    failedTestCount :
+    {
+      check : "Integer",
+      init : 0
+    },
+    
+    /** Running count of passed tests */
+    successfulTestCount :
+    {
+      check : "Integer",
+      init : 0
+    },
+    
+    /** Running count of skipped tests */
+    skippedTestCount :
+    {
+      check : "Integer",
+      init : 0
     }
   },
   
@@ -190,6 +211,8 @@ qx.Class.define("testrunner.view.Html", {
           this.setStatus("Test suite ready");
           this.__runButton.disabled = false;
           this.__stopButton.disabled = true;
+          this.setFailedTestCount(0);
+          this.setSuccessfulTestCount(0);
           break;
         case "running" :
           this.setStatus("Running tests...");
@@ -250,6 +273,19 @@ qx.Class.define("testrunner.view.Html", {
     _onTestChangeState : function(testResultData) {
       var testName = testResultData.getName();
       var state = testResultData.getState();
+      
+      switch (state) {
+        case "skip":
+          this.setSkippedTestCount(this.getSkippedTestCount() + 1);
+          break;
+        case "error":
+        case "failure":
+          this.setFailedTestCount(this.getFailedTestCount() + 1);
+          break;
+        case "success":
+          this.setSuccessfulTestCount(this.getSuccessfulTestCount() + 1);
+      }
+      
       var exception =  testResultData.getException();
       
       var id = this.__testNameToId(testName);
@@ -408,6 +444,7 @@ qx.Class.define("testrunner.view.Html", {
       selectedTests.sort();
       this.setSelectedTests(selectedTests);
     }
+    
   }
   
 });

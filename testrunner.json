@@ -137,6 +137,11 @@
         }
       },
       
+      "settings" :
+      {
+        "qx.testPageUri"   : "./html/tests.html"
+      },
+      
       "compile" : { "type" : "build" }
     },
     

@@ -60,10 +60,10 @@
       {
         "=files" :
         [
-          "index-inline.html",
-          "index-source.html",
           "index-console.html",
+          "index-iframe-source.html",
           "index-iframe.html",
+          "index-inline.html",
           "html"
         ]
       }
@@ -77,6 +77,11 @@
         {
           "file" : "${BUILD_PATH}/script/${APPLICATION}-{testrunner.view}-{testrunner.testOrigin}.js"
         }
+      },
+      
+      "settings" :
+      {
+        "qx.testNameSpace" : "${TEST_NAMESPACE}"
       }
     },
     
@@ -88,11 +93,11 @@
         "testrunner.testOrigin" : ["iframe"]
       },
       
-      "settings" :
-      {
-        "qx.testNameSpace" : "${TEST_NAMESPACE}",
-        "qx.testPageUri"   : "test/html/tests.html"
-      }
+      "=run" :
+      [
+        "build-script",
+        "build-tests-script"
+      ]
     },
     
     "source" :

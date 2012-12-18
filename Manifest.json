@@ -1,7 +1,7 @@
 {
   "info" : 
   {
-    "name" : "testrunner",
+    "name" : "WAT",
 
     "summary" : "Custom Application",
     "description" : "This is a skeleton for a custom application with qooxdoo.",
